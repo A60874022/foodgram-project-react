@@ -1,7 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator
-from django.contrib.auth import get_user_model
-User = get_user_model()
+from user.models import User
 
 class Indigrient(models.Model):
     name = models.CharField(max_length=200, verbose_name='Название',)
