@@ -24,6 +24,8 @@ class TagsAdmin(admin.ModelAdmin):
     search_fields = ('name')
     list_filter = ('name')
     empty_value_display = '-пусто-'
+
+    
 class FavouritesAdmin(admin.ModelAdmin):
     list_display = ('recipe', 'user')
     search_fields = ('user')
