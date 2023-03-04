@@ -46,7 +46,10 @@ class IngredientAmount(models.Model):
         related_name='IngredientAmount',
         verbose_name='Ингредиент'
     )
-    quantity = models.FloatField(verbose_name='количество')
+    quantity = models.FloatField(verbose_name='количество',
+    validators=(
+            MinValueValidator(1, "Минимальное количество ингредиентов 1"),),
+    )
 class Tags(models.Model):
     name = models.CharField(max_length=200, verbose_name='Название',)
     hexcolor = models.CharField(max_length=7, default="#ffffff")

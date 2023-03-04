@@ -14,9 +14,14 @@ class RecipeSerializer(serializers.ModelSerializer):
         fields = ('author', 'name', 'image', 'text', 'indigrient', 'tags', 'cooking_time')
 
 class IngredientAmountSerializer(serializers.ModelSerializer):
+    id = serializers.ReadOnlyField(source="ingredient.id")
+    name = serializers.ReadOnlyField(source="ingredient.name")
+    unit_of_measurement = serializers.ReadOnlyField(
+    source="ingredient.unit_of_measurement")
+
     class Meta:
         model = IngredientAmount
-        fields = ('recipe', 'indigrient')
+        fields = ('id', 'name', 'unit_of_measurement', 'quantity')
 
 class TagsSerializer(serializers.ModelSerializer):
     class Meta:
