@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 from dotenv import load_dotenv
-
+from datetime import timedelta
 load_dotenv()
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'django.contrib.auth',
     'recipes.apps.RecipesConfig',
     'user.apps.UserConfig',
     'api.apps.ApiConfig',
@@ -42,6 +43,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'django_filters',
+    'djoser',
     
 ]
 
@@ -127,3 +131,20 @@ AUTH_USER_MODEL = 'user.User'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 STATIC_URL = '/static/'
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated', 
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.ProductsPagination',
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+}
+
+
+SIMPLE_JWT = {
+    # Устанавливаем срок жизни токена
+   'ACCESS_TOKEN_LIFETIME': timedelta(days=90),
+   'AUTH_HEADER_TYPES': ('Bearer',),
+} 
