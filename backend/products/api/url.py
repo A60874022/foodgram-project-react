@@ -16,7 +16,7 @@ router.register('ingredients',IndigrientViewSet, name = 'ingredients')
 urlpatterns = [
  
     path('recipes/download_shopping_cart/',  DownloadCartViewSet, name = 'rurchases'),
-    path('recipes/<int:id>/download_shopping_cart/', DownloadCartViewSet, name = 'rurchases'),
+    path('recipes/<int:id>/download_shopping_cart/', Cart.as_view(), name = 'rurchases'),
     path('recipes/<int:id>/favorites/', FavoriteViewSet),
     path('recipes/users/subscriptions/', ),
     path('recipes/users/<int:id>/subscriptions/', ),
