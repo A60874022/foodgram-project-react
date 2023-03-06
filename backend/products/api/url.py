@@ -18,8 +18,8 @@ urlpatterns = [
     path('recipes/download_shopping_cart/',  DownloadCartViewSet, name = 'rurchases'),
     path('recipes/<int:id>/download_shopping_cart/', Cart.as_view(), name = 'rurchases'),
     path('recipes/<int:id>/favorites/', FavoriteViewSet),
-    path('recipes/users/subscriptions/', ),
-    path('recipes/users/<int:id>/subscriptions/', ),
+    path('users/subscriptions/', FollowViewSet),
+    path('/users/<int:id>/subscriptions/', FollowCreateViewSet),
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),
 ]
