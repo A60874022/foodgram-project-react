@@ -1,32 +1,39 @@
 from rest_framework import viewsets 
-
+from rest_framework.response import Response
+from http import HTTPStatus
 from rest_framework import serializers
 from recipes.models import (Indigrient, Recipe, IngredientAmount,
                             Tags, Favourites, Rurchases, Follow)
 from rest_framework import generics, filters, mixins, permissions, viewsets
 from user.models import User
 from django_filters.rest_framework import DjangoFilterBackend
-
+from django.shortcuts import get_list_or_404,  get_object_or_404
 from rest_framework import permissions
-from django import HttpResponse
+from django.http import HttpResponse
 
 from .permissions import IsAuthorOnly
+from .pagination import ProductsPagination
+from .serializers import (TagsSerializer, RecipeSerializer, RecipeCreateSerializer,
+IndigrientSerializer, FavouritesSerializer, RurchasesSerializer,
+RecipeInfodSerializer, FollowSerializer, UserSerializer)
+from api.filters import RecipeFilters
 
 class TagsViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Tags.objects.all()
     serializer_class = TagsSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,) 
+    pagination_class = None
 
 class IndigrientViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Indigrient.objects.all()
     serializer_class = IndigrientSerializer
-    filter_backends = (DjangoFilterBackend,)
-    pagination_class = None
-    filterset_fields = ('name')
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('name',)
     permission_classes = (IsAuthorOnly,) 
+    pagination_class = None
 
 class FavoriteViewSet(mixins.CreateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
-    queryset = Favourites.objects.all()
+    queryset = Recipe.objects.all()
     serializer_class =FavouritesSerializer
 
 class  DownloadCartViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, 
@@ -48,8 +55,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    filter_backends = (DjangoFilterBackend,)
-    filterset_fields = ('favorites__user', 'author', 'tags', 'rurchases_user')
+    filter_backends = [DjangoFilterBackend, ]
+    filter_class = RecipeFilters
     serializer_class = RecipeSerializer
     pagination_class = ProductsPagination
 
@@ -60,15 +67,32 @@ class RecipeViewSet(viewsets.ModelViewSet):
             return RecipeSerializer
 
 class FollowViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Follow.objects.all()
-    serializer_class = FollowSerializer
-    pagination_class = ProductsPagination
+    queryset = Recipe.objects.all()
+    serializer_class =  RecipeInfodSerializer
+   
     permission_classes = (permissions.AllowAny,)
 
-class FollowCreateViewSet(mixins.CreateModelMixin, mixins.DestroyModelMixin ,
+class FollowCreateViewSet(mixins.DestroyModelMixin, mixins.CreateModelMixin, 
                             viewsets.GenericViewSet):
     queryset = Follow.objects.all()
     serializer_class = FollowSerializer
+
+
+    def delete(self, request, *args, **kwargs):
+
+        author_id = self.kwargs['users_id']
+        user_id = request.user.id
+        subscribe = get_object_or_404(
+            Follow, user__id=user_id, following__id=author_id)
+        subscribe.delete()
+        return Response(HTTPStatus.NO_CONTENT)
    
-    
+
+        
+class UserViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, 
+                  mixins.RetrieveModelMixin,  viewsets.GenericViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    pagination_class = ProductsPagination
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,) 
  

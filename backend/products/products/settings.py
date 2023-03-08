@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'user.apps.UserConfig',
     'api.apps.ApiConfig',
     'django.contrib.admin',
-    'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -137,7 +136,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated', 
     ],
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.ProductsPagination',
+    'DEFAULT_PAGINATION_CLASS': 'api.pagination.ProductsPagination',
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],

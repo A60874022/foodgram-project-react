@@ -9,7 +9,10 @@ class User(AbstractUser):
         blank=True,
         max_length=150
     )
-
+    is_subscribed = models.BooleanField(
+        default=False,
+        verbose_name='Подписка на данного пользователя',
+        help_text='Отметьте для подписки на данного пользователя')
     class Meta:
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
