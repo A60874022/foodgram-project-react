@@ -6,12 +6,13 @@ from user.models import User
 class Indigrient(models.Model):
     """Класс для работы таблицы Ингредиент."""
     name = models.CharField(max_length=200, verbose_name='Название',)
-    unit_of_measurement = models.CharField(max_length=200,
-                                           verbose_name='Еденица измерения')
+    unit_of_measurement = models.CharField(max_length=200, 
+                                           verbose_name='Еденица измерения',
+                                           blank=True)
     class Meta:
         verbose_name = 'Продукт'
         verbose_name_plural = 'Продукты'
-
+       
     def __str__(self):
         return self.name
 
@@ -65,7 +66,7 @@ class IngredientAmount(models.Model):
                                    on_delete=models.CASCADE,
                                    related_name='IngredientAmount',
                                    verbose_name='Ингредиент')
-    quantity = models.FloatField(verbose_name='количество',
+    quantity = models.FloatField(verbose_name='количество', blank=True,
                                  validators=(MinValueValidator(1,
                                                                'Минимальное'
                                                                'количество'
@@ -100,11 +101,11 @@ class Tags(models.Model):
 
 class Favourites(models.Model):
     """Класс для работы таблицы Избранное."""
-    recipe = models.ForeignKey(Recipe,
+    recipe = models.ForeignKey(Recipe, blank=True,
                                on_delete=models.CASCADE,
                                related_name='favourites',
                                verbose_name='рецепты')
-    user = models.ForeignKey(User,
+    user = models.ForeignKey(User, blank=True,
                              on_delete=models.CASCADE,
                              related_name='favourites',
                              verbose_name='пользователи')
@@ -119,11 +120,11 @@ class Favourites(models.Model):
       
 class Rurchases(models.Model):
     """Класс для работы таблицы списка покупок."""
-    recipe = models.ForeignKey(Recipe,
+    recipe = models.ForeignKey(Recipe, blank=True,
                                on_delete=models.CASCADE,
                                related_name='rurchases',
                                verbose_name='рецепты')
-    author = models.ForeignKey(User,
+    author = models.ForeignKey(User, blank=True,
                                on_delete=models.CASCADE,
                                related_name='rurchases',
                                verbose_name='автор')
@@ -138,11 +139,11 @@ class Rurchases(models.Model):
 
 class Follow(models.Model):
     """Класс для работы таблицы подписки на авторов."""
-    user = models.ForeignKey(User,
+    user = models.ForeignKey(User, blank=True,
                              on_delete=models.CASCADE,
                              related_name='follower',
                              verbose_name='подписчики')
-    author = models.ForeignKey(User,
+    author = models.ForeignKey(User, blank=True,
                                on_delete=models.CASCADE,
                                related_name='following',
                                verbose_name='автор')

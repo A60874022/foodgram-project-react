@@ -2,17 +2,17 @@ from recipes.models import (Favourites, Follow, Indigrient, IngredientAmount,
                             Recipe, Rurchases, Tags)
 from rest_framework import serializers
 from user.models import User
-
+from djoser.serializers import UserCreateSerializer
 from .fields import Base64ImageField
 
 
-class UserSerializer(serializers.ModelSerializer):
+class UserSerializer(UserCreateSerializer):
     """Класс - сериализатор модели User."""
     class Meta:
         model = User
         fields = ('id', 'email', 'username', 'first_name',
                   'last_name', 'is_subscribed', 'password')
-        extra_kwargs = {'is_subscribed': {'required': False}}
+      
 
 
 class TagsSerializer(serializers.ModelSerializer):
@@ -29,7 +29,9 @@ class IndigrientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Indigrient
         fields = ('id', 'name', 'unit_of_measurement')
-
+        extra_kwargs = {'name': {'required': False},
+                        'measurement_unit': {'required': False}}
+   
 
 class RecipeSerializer(serializers.ModelSerializer):
     """Класс - сериализатор модели Recipe."""
@@ -80,9 +82,10 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
     author = UserSerializer(read_only=True)
     is_favorited = serializers.SerializerMethodField()
     is_in_shopping_cart = serializers.SerializerMethodField()
-    model = Recipe
-    fields = ('id', 'tags', 'author', 'ingredients', 'is_favorited',
-              'is_in_shopping_cart', 'name', 'image', 'text', 'cooking_time')
+    class Meta:
+        model = Recipe
+        fields = ('id', 'tags', 'author', 'ingredients', 'is_favorited',
+                  'is_in_shopping_cart', 'name', 'image', 'text', 'cooking_time')
 
     def get_is_favorited(self, recipe):
         """Функция для поля 'is_favorited'."""

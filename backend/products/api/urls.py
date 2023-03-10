@@ -1,6 +1,6 @@
 from api.views import (Cart, DownloadCartViewSet, FavoriteViewSet,
                        FollowCreateViewSet, FollowViewSet, IndigrientViewSet,
-                       RecipeViewSet, TagsViewSet, UserViewSet)
+                       RecipeViewSet, TagsViewSet, CreateUserViewSet)
 from django.urls import include, path
 from rest_framework.authtoken import views
 from rest_framework.routers import DefaultRouter
@@ -8,7 +8,7 @@ from rest_framework.routers import DefaultRouter
 app_name = 'api'
 
 router = DefaultRouter()
-router.register('users', UserViewSet, basename='users')
+router.register('users', CreateUserViewSet, basename='users')
 router.register('tags', TagsViewSet, basename='tags')
 router.register('recipes', RecipeViewSet, basename='recipes')
 router.register('ingredients', IndigrientViewSet, basename='ingredients')
@@ -25,7 +25,7 @@ urlpatterns = [
          FollowCreateViewSet.as_view({'post': 'create',
                                       'delete': 'delete'}),
          name='subscribe'),
-    path('auth/', include('djoser.urls')),
-    path('api-token-auth/', views.obtain_auth_token),
+    path('auth/', include('djoser.urls.authtoken')),
+    path('', include('djoser.urls')),
     path('', include(router.urls))
 ]

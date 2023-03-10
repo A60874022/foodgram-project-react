@@ -3,6 +3,7 @@ from http import HTTPStatus
 from api.filters import RecipeFilters
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
+from djoser.views import UserViewSet
 from django_filters.rest_framework import DjangoFilterBackend
 from recipes.models import (Favourites, Follow, Indigrient, Recipe, Rurchases,
                             Tags)
@@ -103,10 +104,8 @@ class FollowCreateViewSet(mixins.DestroyModelMixin, mixins.CreateModelMixin,
         return Response(HTTPStatus.NO_CONTENT)
 
 
-class UserViewSet(mixins.CreateModelMixin, mixins.ListModelMixin,
-                  mixins.RetrieveModelMixin,  viewsets.GenericViewSet):
+class CreateUserViewSet(UserViewSet):
     """Вьюсет для работе с моделью User."""
     queryset = User.objects.all()
     serializer_class = UserSerializer
     pagination_class = ProductsPagination
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
