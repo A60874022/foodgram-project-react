@@ -14,7 +14,7 @@ import Input from './input'
 import AccountMenu from './account-menu'
 import Nav from './nav'
 import Tag from './tag'
-import TagsContainer from './tags-container'
+import TagContainer from './Tag-container'
 import Textarea from './textarea'
 import Checkbox from './checkbox'
 import CheckboxGroup from './checkbox-group'
@@ -43,7 +43,7 @@ export {
   AccountMenu,
   Nav,
   Tag,
-  TagsContainer,
+  TagContainer,
   Textarea,
   Checkbox,
   CheckboxGroup,

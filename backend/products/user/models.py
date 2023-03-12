@@ -4,16 +4,15 @@ from django.db import models
 
 class User(AbstractUser):
     """Класс для работы с модель """
-    email = models.EmailField('email address', max_length=254, blank=True)
-    first_name = models.CharField('first name', max_length=150, blank=True)
-    password = models.CharField(
-        blank=True,
-        max_length=150
-    )
-    is_subscribed = models.BooleanField(
-        default=False,
-        verbose_name='Подписка на данного пользователя',
-        help_text='Отметьте для подписки на данного пользователя')
+    username = models.CharField(
+        db_index=True,
+        max_length=150,
+        unique=True,
+        verbose_name='Уникальное имя',)
+    password = models.CharField(max_length=150)
+    email = models.EmailField('email address', max_length=254)
+    first_name = models.CharField('first name', max_length=150)
+    last_name = models.CharField(max_length=150, verbose_name='Фамилия')
 
     class Meta:
         verbose_name = 'Пользователь'

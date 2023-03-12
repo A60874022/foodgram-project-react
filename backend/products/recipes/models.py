@@ -6,13 +6,15 @@ from user.models import User
 class Indigrient(models.Model):
     """Класс для работы таблицы Ингредиент."""
     name = models.CharField(max_length=200, verbose_name='Название',)
-    unit_of_measurement = models.CharField(max_length=200, 
-                                           verbose_name='Еденица измерения',
-                                           blank=True)
+    measurement_unit = models.CharField(max_length=200,
+                                        verbose_name='Еденица измерения')
+ 
     class Meta:
         verbose_name = 'Продукт'
         verbose_name_plural = 'Продукты'
-       
+        models.UniqueConstraint(fields=['name', 'following'],
+                                name='measurement_unit')
+
     def __str__(self):
         return self.name
 
@@ -33,8 +35,8 @@ class Recipe(models.Model):
         verbose_name='Ингредиенты',
         related_name='recipes',
     )
-    tags = models.ManyToManyField(
-        'Tags',
+    Tag = models.ManyToManyField(
+        'Tag',
         verbose_name='Теги',
         related_name='recipes',
     )
@@ -72,23 +74,21 @@ class IngredientAmount(models.Model):
                                                                'количество'
                                                                'ингредиентов'
                                                                '1'),),)
-    
+
     class Meta:
         verbose_name = 'Рецепт -интигриенты'
         verbose_name_plural = 'Рецепт -интигриенты'
 
-
     def __str__(self):
-         return f' {self.recipe}{self.indigrient}'
+        return f'{self.recipe}{self.indigrient}'
 
 
-
-class Tags(models.Model):
+class Tag(models.Model):
     """Класс для работы таблицы тэг."""
     name = models.CharField(max_length=200,
                             verbose_name='Название',)
-    hexcolor = models.CharField(max_length=7, default="#ffffff", 
-                                verbose_name = 'цвет')
+    color = models.CharField(max_length=7, default="#ffffff",
+                             verbose_name='цвет')
     slug = models.SlugField(unique=True, verbose_name='слаг')
 
     class Meta:
@@ -99,42 +99,42 @@ class Tags(models.Model):
         return self.name
 
 
-class Favourites(models.Model):
+class Favorite(models.Model):
     """Класс для работы таблицы Избранное."""
-    recipe = models.ForeignKey(Recipe, blank=True,
+    recipe = models.ForeignKey(Recipe,
                                on_delete=models.CASCADE,
-                               related_name='favourites',
+                               related_name='Favorite',
                                verbose_name='рецепты')
-    user = models.ForeignKey(User, blank=True,
+    user = models.ForeignKey(User,
                              on_delete=models.CASCADE,
-                             related_name='favourites',
+                             related_name='Favorite',
                              verbose_name='пользователи')
-    
+
     class Meta:
         verbose_name = 'избранное'
         verbose_name_plural = 'избранное'
-    
-    def __str__(self):
-        return self.recipe
 
-      
-class Rurchases(models.Model):
+    def __str__(self):
+        return f'{self.recipe} {self.user}'
+
+
+class ListShopping(models.Model):
     """Класс для работы таблицы списка покупок."""
-    recipe = models.ForeignKey(Recipe, blank=True,
+    recipe = models.ForeignKey(Recipe,
                                on_delete=models.CASCADE,
-                               related_name='rurchases',
+                               related_name='ListShopping',
                                verbose_name='рецепты')
-    author = models.ForeignKey(User, blank=True,
+    author = models.ForeignKey(User,
                                on_delete=models.CASCADE,
-                               related_name='rurchases',
+                               related_name='ListShopping',
                                verbose_name='автор')
-    
+
     class Meta:
         verbose_name = 'список покупок'
-        verbose_name_plural= 'список покупок'
-    
+        verbose_name_plural = 'список покупок'
+
     def __str__(self):
-        return f'{self.user} {self.recipe}'
+        return f'{self.author} {self.recipe}'
 
 
 class Follow(models.Model):
@@ -147,10 +147,12 @@ class Follow(models.Model):
                                on_delete=models.CASCADE,
                                related_name='following',
                                verbose_name='автор')
-    
+
     class Meta:
         verbose_name = 'Подписчик'
         verbose_name_plural = 'подписчики'
+        models.UniqueConstraint(fields=['user', ' author'],
+                                name='unique_subscribe')
 
     def __str__(self):
-        return f'{self.user} {self.following}'
+        return f'{self.user} {self.author}'

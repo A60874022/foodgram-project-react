@@ -49,7 +49,7 @@ paths:
                       $ref: '#/components/schemas/User'
                     description: 'Список объектов текущей страницы'
           description: ''
-      tags:
+      Tag:
         - Пользователи
     post:
       operationId: Регистрация пользователя
@@ -69,9 +69,9 @@ paths:
           description: 'Пользователь успешно создан'
         '400':
           $ref: '#/components/responses/ValidationError'
-      tags:
+      Tag:
         - Пользователи
-  /api/tags/:
+  /api/Tag/:
     get:
       operationId: Cписок тегов
       description: ''
@@ -85,9 +85,9 @@ paths:
                 items:
                   $ref: '#/components/schemas/Tag'
           description: ''
-      tags:
+      Tag:
         - Теги
-  /api/tags/{id}/:
+  /api/Tag/{id}/:
     get:
       operationId: Получение тега
       description: ''
@@ -107,7 +107,7 @@ paths:
           description: ''
         '404':
           $ref: '#/components/responses/NotFound'
-      tags:
+      Tag:
         - Теги
   /api/recipes/:
     get:
@@ -146,11 +146,11 @@ paths:
           description: Показывать рецепты только автора с указанным id.
           schema:
             type: integer
-        - name: tags
+        - name: Tag
           required: false
           in: query
           description: Показывать рецепты только с указанными тегами (по slug)
-          example: 'lunch&tags=breakfast'
+          example: 'lunch&Tag=breakfast'
 
           schema:
             type: array
@@ -185,7 +185,7 @@ paths:
                       $ref: '#/components/schemas/RecipeList'
                     description: 'Список объектов текущей страницы'
           description: ''
-      tags:
+      Tag:
         - Рецепты
     post:
       security:
@@ -215,7 +215,7 @@ paths:
           $ref: '#/components/schemas/AuthenticationError'
         '404':
           $ref: '#/components/responses/NotFound'
-      tags:
+      Tag:
         - Рецепты
   /api/recipes/download_shopping_cart/:
     get:
@@ -238,7 +238,7 @@ paths:
                 format: binary
         '401':
           $ref: '#/components/responses/AuthenticationError'
-      tags:
+      Tag:
         - Список покупок
   /api/recipes/{id}/:
     get:
@@ -258,7 +258,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/RecipeList'
           description: ''
-      tags:
+      Tag:
         - Рецепты
     patch:
       operationId: Обновление рецепта
@@ -292,7 +292,7 @@ paths:
           $ref: '#/components/responses/PermissionDenied'
         '404':
           $ref: '#/components/responses/NotFound'
-      tags:
+      Tag:
         - Рецепты
     delete:
       operationId: Удаление рецепта
@@ -316,7 +316,7 @@ paths:
           $ref: '#/components/responses/PermissionDenied'
         '404':
           $ref: '#/components/responses/NotFound'
-      tags:
+      Tag:
         - Рецепты
   /api/recipes/{id}/favorite/:
     post:
@@ -347,7 +347,7 @@ paths:
         '401':
           $ref: '#/components/responses/AuthenticationError'
 
-      tags:
+      Tag:
         - Избранное
     delete:
       operationId: Удалить рецепт из избранного
@@ -372,7 +372,7 @@ paths:
                 $ref: '#/components/schemas/SelfMadeError'
         '401':
           $ref: '#/components/responses/AuthenticationError'
-      tags:
+      Tag:
         - Избранное
   /api/recipes/{id}/shopping_cart/:
     post:
@@ -402,7 +402,7 @@ paths:
                 $ref: '#/components/schemas/SelfMadeError'
         '401':
           $ref: '#/components/responses/AuthenticationError'
-      tags:
+      Tag:
         - Список покупок
     delete:
       operationId: Удалить рецепт из списка покупок
@@ -427,7 +427,7 @@ paths:
                 $ref: '#/components/schemas/SelfMadeError'
         '401':
           $ref: '#/components/responses/AuthenticationError'
-      tags:
+      Tag:
         - Список покупок
   /api/users/{id}/:
     get:
@@ -453,7 +453,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         '401':
           $ref: '#/components/responses/AuthenticationError'
-      tags:
+      Tag:
         - Пользователи
   /api/users/me/:
     get:
@@ -471,7 +471,7 @@ paths:
           description: ''
         '401':
           $ref: '#/components/responses/AuthenticationError'
-      tags:
+      Tag:
         - Пользователи
   /api/users/subscriptions/:
     get:
@@ -527,7 +527,7 @@ paths:
           description: ''
         '401':
           $ref: '#/components/responses/AuthenticationError'
-      tags:
+      Tag:
         - Подписки
   /api/users/{id}/subscribe/:
     post:
@@ -565,7 +565,7 @@ paths:
           $ref: '#/components/responses/AuthenticationError'
         '404':
           $ref: '#/components/responses/NotFound'
-      tags:
+      Tag:
         - Подписки
     delete:
       operationId: Отписаться от пользователя
@@ -593,7 +593,7 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 
-      tags:
+      Tag:
         - Подписки
   /api/ingredients/:
     get:
@@ -615,7 +615,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/Ingredient'
           description: ''
-      tags:
+      Tag:
         - Ингредиенты
   /api/ingredients/{id}/:
     get:
@@ -635,7 +635,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Ingredient'
           description: ''
-      tags:
+      Tag:
         - Ингредиенты
   /api/users/set_password/:
     post:
@@ -654,7 +654,7 @@ paths:
           $ref: '#/components/responses/ValidationError'
         '401':
           $ref: '#/components/responses/AuthenticationError'
-      tags:
+      Tag:
         - Пользователи
   /api/auth/token/login/:
     post:
@@ -673,7 +673,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/TokenGetResponse'
           description: ''
-      tags:
+      Tag:
         - Пользователи
   /api/auth/token/logout/:
     post:
@@ -693,7 +693,7 @@ paths:
           description: ''
         '401':
           $ref: '#/components/responses/AuthenticationError'
-      tags:
+      Tag:
         - Пользователи
 components:
   schemas:
@@ -801,7 +801,7 @@ components:
           type: integer
           readOnly: true
           description: 'Уникальный id'
-        tags:
+        Tag:
           description: 'Список тегов'
           type: array
           items:
@@ -836,7 +836,7 @@ components:
           type: integer
           minimum: 1
       required:
-        - tags
+        - Tag
         - author
         - is_favorited
         - is_in_shopping_cart
@@ -1072,7 +1072,7 @@ components:
             required:
               - id
               - amount
-        tags:
+        Tag:
           description: 'Список id тегов'
           type: array
           example: [1, 2]
@@ -1096,7 +1096,7 @@ components:
           minimum: 1
       required:
         - ingredients
-        - tags
+        - Tag
         - image
         - name
         - text

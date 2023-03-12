@@ -1,31 +1,37 @@
 from django.contrib import admin
-from recipes.models import (Favourites, Follow, Indigrient, IngredientAmount,
-                            Recipe, Rurchases, Tags)
+from recipes.models import (Favorite, Follow, Indigrient, IngredientAmount,
+                            ListShopping, Recipe, Tag)
+
+
+class IndigrientInline(admin.StackedInline):
+    model = Recipe.indigrient.through
 
 
 @admin.register(Indigrient)
-class IndigrientAdmin(admin.ModelAdmin):
-    list_display = ('name', 'unit_of_measurement')
-    search_fields = ('name',)
-    list_filter = ('name',)
+class IngredientAdmin(admin.ModelAdmin):
+
+    list_display = ('name', 'measurement_unit')
+    search_fields = ('name', )
     empty_value_display = '-пусто-'
+    list_filter = ('name',)
 
 
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'author',
-                    'amount_tags', 'amount_ingredients')
-    search_fields = ('author', 'name', 'tags',)
+                    'amount_tag', 'amount_ingredient')
+    search_fields = ('author', 'name', 'Tag',)
     list_filter = ('author', 'name', )
     empty_value_display = '-пусто-'
+    inlines = [IndigrientInline, ]
 
     @staticmethod
-    def amount_tags(obj):
-        return "\n".join([i[0] for i in obj.tags.values_list('name')])
+    def amount_tag(obj):
+        return "\n".join([i[0] for i in obj.Tag.values_list('name')])
 
     @staticmethod
-    def amount_ingredients(obj):
-        return "\n".join([i[0] for i in obj.ingredients.values_list('name')])
+    def amount_ingredient(obj):
+        return "\n".join([i[0] for i in obj.ingredient.values_list('name')])
 
 
 @admin.register(IngredientAmount)
@@ -36,23 +42,23 @@ class IngredientAmountAdmin(admin.ModelAdmin):
     empty_value_display = '-пусто-'
 
 
-@admin.register(Tags)
-class TagsAdmin(admin.ModelAdmin):
+@admin.register(Tag)
+class TagAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug')
     search_fields = ('name',)
     list_filter = ('name',)
     empty_value_display = '-пусто-'
 
 
-@admin.register(Favourites)
-class FavouritesAdmin(admin.ModelAdmin):
+@admin.register(Favorite)
+class FavoriteAdmin(admin.ModelAdmin):
     list_display = ('recipe', 'user')
     search_fields = ('user',)
     list_filter = ('user',)
 
 
-@admin.register(Rurchases)
-class RurchasesAdmin(admin.ModelAdmin):
+@admin.register(ListShopping)
+class ListShoppingAdmin(admin.ModelAdmin):
     list_display = ('recipe', 'author')
     search_fields = ('author',)
     list_filter = ('author',)

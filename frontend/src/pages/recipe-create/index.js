@@ -2,12 +2,12 @@ import { Container, IngredientsSearch, FileInput, Input, Title, CheckboxGroup, M
 import styles from './styles.module.css'
 import api from '../../api'
 import { useEffect, useState } from 'react'
-import { useTags } from '../../utils'
+import { useTag } from '../../utils'
 import { useHistory } from 'react-router-dom'
-import MetaTags from 'react-meta-tags'
+import MetaTag from 'react-meta-Tag'
 
 const RecipeCreate = ({ onEdit }) => {
-  const { value, handleChange, setValue } = useTags()
+  const { value, handleChange, setValue } = useTag()
   const [ recipeName, setRecipeName ] = useState('')
   const history = useHistory()
   const [ ingredientValue, setIngredientValue ] = useState({
@@ -35,9 +35,9 @@ const RecipeCreate = ({ onEdit }) => {
   }, [ingredientValue.name])
 
   useEffect(_ => {
-    api.getTags()
-      .then(tags => {
-        setValue(tags.map(tag => ({ ...tag, value: true })))
+    api.getTag()
+      .then(Tag => {
+        setValue(Tag.map(tag => ({ ...tag, value: true })))
       })
   }, [])
 
@@ -62,11 +62,11 @@ const RecipeCreate = ({ onEdit }) => {
 
   return <Main>
     <Container>
-      <MetaTags>
+      <MetaTag>
         <title>Создание рецепта</title>
         <meta name="description" content="Продуктовый помощник - Создание рецепта" />
         <meta property="og:title" content="Создание рецепта" />
-      </MetaTags>
+      </MetaTag>
       <Title title='Создание рецепта' />
       <Form
         className={styles.form}
@@ -79,7 +79,7 @@ const RecipeCreate = ({ onEdit }) => {
               id: item.id,
               amount: item.amount
             })),
-            tags: value.filter(item => item.value).map(item => item.id),
+            Tag: value.filter(item => item.value).map(item => item.id),
             cooking_time: recipeTime,
             image: recipeFile
           }
@@ -121,7 +121,7 @@ const RecipeCreate = ({ onEdit }) => {
           values={value}
           className={styles.checkboxGroup}
           labelClassName={styles.checkboxGroupLabel}
-          tagsClassName={styles.checkboxGroupTags}
+          TagClassName={styles.checkboxGroupTag}
           checkboxClassName={styles.checkboxGroupItem}
           handleChange={handleChange}
         />

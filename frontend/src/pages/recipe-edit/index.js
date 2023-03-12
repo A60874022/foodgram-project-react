@@ -2,12 +2,12 @@ import { Container, IngredientsSearch, FileInput, Input, Title, CheckboxGroup, M
 import styles from './styles.module.css'
 import api from '../../api'
 import { useEffect, useState } from 'react'
-import { useTags } from '../../utils'
+import { useTag } from '../../utils'
 import { useParams, useHistory } from 'react-router-dom'
-import MetaTags from 'react-meta-tags'
+import MetaTag from 'react-meta-Tag'
 
 const RecipeEdit = ({ onItemDelete }) => {
-  const { value, handleChange, setValue } = useTags()
+  const { value, handleChange, setValue } = useTag()
   const [ recipeName, setRecipeName ] = useState('')
 
   const [ ingredientValue, setIngredientValue ] = useState({
@@ -43,9 +43,9 @@ const RecipeEdit = ({ onItemDelete }) => {
   }, [ingredientValue.name])
 
   useEffect(_ => {
-    api.getTags()
-      .then(tags => {
-        setValue(tags.map(tag => ({ ...tag, value: true })))
+    api.getTag()
+      .then(Tag => {
+        setValue(Tag.map(tag => ({ ...tag, value: true })))
       })
   }, [])
 
@@ -57,7 +57,7 @@ const RecipeEdit = ({ onItemDelete }) => {
     }).then(res => {
       const {
         image,
-        tags,
+        Tag,
         cooking_time,
         name,
         ingredients,
@@ -70,11 +70,11 @@ const RecipeEdit = ({ onItemDelete }) => {
       setRecipeIngredients(ingredients)
 
 
-      const tagsValueUpdated = value.map(item => {
-        item.value = Boolean(tags.find(tag => tag.id === item.id))
+      const TagValueUpdated = value.map(item => {
+        item.value = Boolean(Tag.find(tag => tag.id === item.id))
         return item
       })
-      setValue(tagsValueUpdated)
+      setValue(TagValueUpdated)
       setLoading(false)
     })
     .catch(err => {
@@ -103,11 +103,11 @@ const RecipeEdit = ({ onItemDelete }) => {
 
   return <Main>
     <Container>
-      <MetaTags>
+      <MetaTag>
         <title>Редактирование рецепта</title>
         <meta name="description" content="Продуктовый помощник - Редактирование рецепта" />
         <meta property="og:title" content="Редактирование рецепта" />
-      </MetaTags>
+      </MetaTag>
       <Title title='Редактирование рецепта' />
       <Form
         className={styles.form}
@@ -120,7 +120,7 @@ const RecipeEdit = ({ onItemDelete }) => {
               id: item.id,
               amount: item.amount
             })),
-            tags: value.filter(item => item.value).map(item => item.id),
+            Tag: value.filter(item => item.value).map(item => item.id),
             cooking_time: recipeTime,
             image: recipeFile,
             recipe_id: id
@@ -165,7 +165,7 @@ const RecipeEdit = ({ onItemDelete }) => {
           values={value}
           className={styles.checkboxGroup}
           labelClassName={styles.checkboxGroupLabel}
-          tagsClassName={styles.checkboxGroupTags}
+          TagClassName={styles.checkboxGroupTag}
           checkboxClassName={styles.checkboxGroupItem}
           handleChange={handleChange}
         />

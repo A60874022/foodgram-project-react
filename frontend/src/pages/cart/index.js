@@ -3,7 +3,7 @@ import styles from './styles.module.css'
 import { useRecipes } from '../../utils/index.js'
 import { useEffect, useState } from 'react'
 import api from '../../api'
-import MetaTags from 'react-meta-tags'
+import MetaTag from 'react-meta-Tag'
 
 const Cart = ({ updateOrders, orders }) => {
   const {
@@ -35,11 +35,11 @@ const Cart = ({ updateOrders, orders }) => {
 
   return <Main>
     <Container className={styles.container}>
-      <MetaTags>
+      <MetaTag>
         <title>Список покупок</title>
         <meta name="description" content="Продуктовый помощник - Список покупок" />
         <meta property="og:title" content="Список покупок" />
-      </MetaTags>
+      </MetaTag>
       <div className={styles.cart}>
         <Title title='Список покупок' />
         <PurchaseList

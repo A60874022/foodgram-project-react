@@ -109,13 +109,13 @@ class Api {
     is_favorited = 0,
     is_in_shopping_cart = 0,
     author,
-    tags
+    Tag
   } = {}) {
       const token = localStorage.getItem('token')
       const authorization = token ? { 'authorization': `Token ${token}` } : {}
-      const tagsString = tags ? tags.filter(tag => tag.value).map(tag => `&tags=${tag.slug}`).join('') : ''
+      const TagString = Tag ? Tag.filter(tag => tag.value).map(tag => `&Tag=${tag.slug}`).join('') : ''
       return fetch(
-        `/api/recipes/?page=${page}&limit=${limit}${author ? `&author=${author}` : ''}${is_favorited ? `&is_favorited=${is_favorited}` : ''}${is_in_shopping_cart ? `&is_in_shopping_cart=${is_in_shopping_cart}` : ''}${tagsString}`,
+        `/api/recipes/?page=${page}&limit=${limit}${author ? `&author=${author}` : ''}${is_favorited ? `&is_favorited=${is_favorited}` : ''}${is_in_shopping_cart ? `&is_in_shopping_cart=${is_in_shopping_cart}` : ''}${TagString}`,
         {
           method: 'GET',
           headers: {
@@ -146,7 +146,7 @@ class Api {
   createRecipe ({
     name = '',
     image,
-    tags = [],
+    Tag = [],
     cooking_time = 0,
     text = '',
     ingredients = []
@@ -163,7 +163,7 @@ class Api {
         body: JSON.stringify({
           name,
           image,
-          tags,
+          Tag,
           cooking_time,
           text,
           ingredients
@@ -176,7 +176,7 @@ class Api {
     name,
     recipe_id,
     image,
-    tags,
+    Tag,
     cooking_time,
     text,
     ingredients
@@ -194,7 +194,7 @@ class Api {
           name,
           id: recipe_id,
           image: wasImageUpdated ? image : undefined,
-          tags,
+          Tag,
           cooking_time: Number(cooking_time),
           text,
           ingredients
@@ -328,11 +328,11 @@ class Api {
     ).then(this.checkResponse)
   }
 
-  // tags
-  getTags () {
+  // Tag
+  getTag () {
     const token = localStorage.getItem('token')
     return fetch(
-      `/api/tags/`,
+      `/api/Tag/`,
       {
         method: 'GET',
         headers: {

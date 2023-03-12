@@ -2,10 +2,10 @@ import styles from './styles.module.css'
 import cn from 'classnames'
 import { Tag } from '../index'
 
-const TagsContainer = ({ tags }) => {
-  if (!tags) { return null }
-  return <div className={styles['tags-container']}>
-    {tags.map(tag => {
+const TagContainer = ({ Tag }) => {
+  if (!Tag) { return null }
+  return <div className={styles['Tag-container']}>
+    {Tag.map(tag => {
       return <Tag
         key={tag.id}
         color={tag.color}
@@ -15,4 +15,4 @@ const TagsContainer = ({ tags }) => {
   </div>
 }
 
-export default TagsContainer
+export default TagContainer

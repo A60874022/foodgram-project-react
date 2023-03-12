@@ -3,7 +3,7 @@ import styles from './styles.module.css'
 import { useRecipes } from '../../utils/index.js'
 import { useEffect } from 'react'
 import api from '../../api'
-import MetaTags from 'react-meta-tags'
+import MetaTag from 'react-meta-Tag'
 
 const Favorites = ({ updateOrders }) => {
   const {
@@ -13,16 +13,16 @@ const Favorites = ({ updateOrders }) => {
     setRecipesCount,
     recipesPage,
     setRecipesPage,
-    tagsValue,
-    handleTagsChange,
-    setTagsValue,
+    TagValue,
+    handleTagChange,
+    setTagValue,
     handleLike,
     handleAddToCart
   } = useRecipes()
   
-  const getRecipes = ({ page = 1, tags }) => {
+  const getRecipes = ({ page = 1, Tag }) => {
     api
-      .getRecipes({ page, is_favorited: Number(true), tags })
+      .getRecipes({ page, is_favorited: Number(true), Tag })
       .then(res => {
         const { results, count } = res
         setRecipes(results)
@@ -31,31 +31,31 @@ const Favorites = ({ updateOrders }) => {
   }
 
   useEffect(_ => {
-    getRecipes({ page: recipesPage, tags: tagsValue })
-  }, [recipesPage, tagsValue])
+    getRecipes({ page: recipesPage, Tag: TagValue })
+  }, [recipesPage, TagValue])
 
   useEffect(_ => {
-    api.getTags()
-      .then(tags => {
-        setTagsValue(tags.map(tag => ({ ...tag, value: true })))
+    api.getTag()
+      .then(Tag => {
+        setTagValue(Tag.map(tag => ({ ...tag, value: true })))
       })
   }, [])
 
 
   return <Main>
     <Container>
-      <MetaTags>
+      <MetaTag>
         <title>Избранное</title>
         <meta name="description" content="Продуктовый помощник - Избранное" />
         <meta property="og:title" content="Избранное" />
-      </MetaTags>
+      </MetaTag>
       <div className={styles.title}>
         <Title title='Избранное' />
         <CheckboxGroup
-          values={tagsValue}
+          values={TagValue}
           handleChange={value => {
             setRecipesPage(1)
-            handleTagsChange(value)
+            handleTagChange(value)
           }}
         />
       </div>
