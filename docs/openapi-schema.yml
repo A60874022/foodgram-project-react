@@ -595,7 +595,7 @@ paths:
 
       Tag:
         - Подписки
-  /api/ingredients/:
+  /api/ingredient/:
     get:
       operationId: Список ингредиентов
       description: 'Список ингредиентов с возможностью поиска по имени.'
@@ -617,7 +617,7 @@ paths:
           description: ''
       Tag:
         - Ингредиенты
-  /api/ingredients/{id}/:
+  /api/ingredient/{id}/:
     get:
       operationId: Получение ингредиента
       description: 'Уникальный идентификатор этого ингредиента.'
@@ -808,7 +808,7 @@ components:
             $ref: '#/components/schemas/Tag'
         author:
           $ref: '#/components/schemas/User'
-        ingredients:
+        ingredient:
           description: 'Список ингредиентов'
           type: array
           items:
@@ -1054,7 +1054,7 @@ components:
         id:
           type: integer
           readOnly: true
-        ingredients:
+        ingredient:
           description: Список ингредиентов
           type: array
           items:
@@ -1095,7 +1095,7 @@ components:
           type: integer
           minimum: 1
       required:
-        - ingredients
+        - ingredient
         - Tag
         - image
         - name
@@ -1116,7 +1116,7 @@ components:
       description: Стандартные ошибки валидации DRF
       type: object
       properties:
-        ingredients:
+        ingredient:
           description: 'Ошибки в ингредиентах. В приведенном примере в первом и третьем ингредиенте не было ошибок (amount >= 1), а во втором были.'
           example: [{},{"amount":["Убедитесь, что это значение больше либо равно 1."]}, {}]
           type: array

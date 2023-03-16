@@ -12,7 +12,7 @@ from rest_framework.response import Response
 from user.models import User
 
 from .pagination import ProductsPagination
-from .permissions import IsAuthorOrAdminOrReadOnly
+from .permissions import IsAuthenticatedOrReadOnly
 from .serializers import (FavoriteSerializer, FollowSerializer,
                           IndigrientSerializer, ListShoppingSerializer,
                           RecipeCreateSerializer, RecipeInfodSerializer,
@@ -23,7 +23,6 @@ class TagViewSet(viewsets.ReadOnlyModelViewSet):
     """Вьюсет для работе с моделью Tag"""
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     pagination_class = None
 
 
@@ -33,7 +32,7 @@ class IndigrientViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = IndigrientSerializer
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name',)
-    permission_classes = (IsAuthorOrAdminOrReadOnly,)
+    permission_classes = (IsAuthenticatedOrReadOnly,)
     pagination_class = None
 
 
@@ -67,7 +66,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     """Вьюсет для работе с моделью Recipe."""
     queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
-    permission_classes = [IsAuthorOrAdminOrReadOnly, ]
+    permission_classes = [IsAuthenticatedOrReadOnly, ]
     filter_backends = [DjangoFilterBackend, ]
     filter_class = RecipeFilters
     serializer_class = RecipeSerializer

@@ -149,7 +149,7 @@ class Api {
     Tag = [],
     cooking_time = 0,
     text = '',
-    ingredients = []
+    ingredient = []
   }) {
     const token = localStorage.getItem('token')
     return fetch(
@@ -166,7 +166,7 @@ class Api {
           Tag,
           cooking_time,
           text,
-          ingredients
+          ingredient
         })
       }
     ).then(this.checkResponse)
@@ -179,7 +179,7 @@ class Api {
     Tag,
     cooking_time,
     text,
-    ingredients
+    ingredient
   }, wasImageUpdated) { // image was changed
     const token = localStorage.getItem('token')
     return fetch(
@@ -197,7 +197,7 @@ class Api {
           Tag,
           cooking_time: Number(cooking_time),
           text,
-          ingredients
+          ingredient
         })
       }
     ).then(this.checkResponse)
@@ -314,11 +314,11 @@ class Api {
     ).then(this.checkResponse)
   }
 
-  // ingredients
-  getIngredients ({ name }) {
+  // ingredient
+  getingredient ({ name }) {
     const token = localStorage.getItem('token')
     return fetch(
-      `/api/ingredients/?name=${name}`,
+      `/api/ingredient/?name=${name}`,
       {
         method: 'GET',
         headers: {

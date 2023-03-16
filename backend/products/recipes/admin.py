@@ -6,6 +6,9 @@ from recipes.models import (Favorite, Follow, Indigrient, IngredientAmount,
 class IndigrientInline(admin.StackedInline):
     model = Recipe.indigrient.through
 
+class TagtInline(admin.StackedInline):
+    model = Recipe.tag.through
+
 
 @admin.register(Indigrient)
 class IngredientAdmin(admin.ModelAdmin):
@@ -16,6 +19,14 @@ class IngredientAdmin(admin.ModelAdmin):
     list_filter = ('name',)
 
 
+@admin.register(IngredientAmount)
+class IngredientAmountAdmin(admin.ModelAdmin):
+    list_display = ('recipe', 'indigrient')
+    search_fields = ('recipe',)
+    list_filter = ('recipe',)
+    empty_value_display = '-пусто-'
+
+
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'author',
@@ -23,7 +34,8 @@ class RecipeAdmin(admin.ModelAdmin):
     search_fields = ('author', 'name', 'Tag',)
     list_filter = ('author', 'name', )
     empty_value_display = '-пусто-'
-    inlines = [IndigrientInline, ]
+    inlines = [IndigrientInline, TagtInline,]
+   
 
     @staticmethod
     def amount_tag(obj):
@@ -34,12 +46,7 @@ class RecipeAdmin(admin.ModelAdmin):
         return "\n".join([i[0] for i in obj.ingredient.values_list('name')])
 
 
-@admin.register(IngredientAmount)
-class IngredientAmountAdmin(admin.ModelAdmin):
-    list_display = ('recipe', 'indigrient')
-    search_fields = ('recipe',)
-    list_filter = ('recipe',)
-    empty_value_display = '-пусто-'
+
 
 
 @admin.register(Tag)

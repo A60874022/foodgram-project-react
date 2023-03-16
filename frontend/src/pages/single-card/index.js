@@ -2,7 +2,7 @@ import { Container, Main, Button, TagContainer, Icons, LinkComponent } from '../
 import { UserContext, AuthContext } from '../../contexts'
 import { useContext, useState, useEffect } from 'react'
 import styles from './styles.module.css'
-import Ingredients from './ingredients'
+import ingredient from './ingredient'
 import Description from './description'
 import cn from 'classnames'
 import { useRouteMatch, useParams, useHistory } from 'react-router-dom'
@@ -45,7 +45,7 @@ const SingleCard = ({ loadItem, updateOrders }) => {
     Tag,
     cooking_time,
     name,
-    ingredients,
+    ingredient,
     text,
     is_favorited,
     is_in_shopping_cart
@@ -111,7 +111,7 @@ const SingleCard = ({ loadItem, updateOrders }) => {
               {author.is_subscribed ? 'Отписаться от автора' : 'Подписаться на автора'}
             </Button>}
           </div>
-          <Ingredients ingredients={ingredients} />
+          <ingredient ingredient={ingredient} />
           <Description description={text} />
         </div>
     </div>

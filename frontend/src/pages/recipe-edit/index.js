@@ -1,4 +1,4 @@
-import { Container, IngredientsSearch, FileInput, Input, Title, CheckboxGroup, Main, Form, Button, Checkbox, Textarea } from '../../components'
+import { Container, ingredientSearch, FileInput, Input, Title, CheckboxGroup, Main, Form, Button, Checkbox, Textarea } from '../../components'
 import styles from './styles.module.css'
 import api from '../../api'
 import { useEffect, useState } from 'react'
@@ -17,7 +17,7 @@ const RecipeEdit = ({ onItemDelete }) => {
     measurement_unit: ''
   })
 
-  const [ recipeIngredients, setRecipeIngredients ] = useState([])
+  const [ recipeingredient, setRecipeingredient ] = useState([])
   const [ recipeText, setRecipeText ] = useState('')
   const [ recipeTime, setRecipeTime ] = useState(0)
   const [ recipeFile, setRecipeFile ] = useState(null)
@@ -26,19 +26,19 @@ const RecipeEdit = ({ onItemDelete }) => {
     setRecipeFileWasManuallyChanged
   ] = useState(false)
 
-  const [ ingredients, setIngredients ] = useState([])
-  const [ showIngredients, setShowIngredients ] = useState(false)
+  const [ ingredient, setingredient ] = useState([])
+  const [ showingredient, setShowingredient ] = useState(false)
   const [ loading, setLoading ] = useState(true)
   const history = useHistory()
 
   useEffect(_ => {
     if (ingredientValue.name === '') {
-      return setIngredients([])
+      return setingredient([])
     }
     api
-      .getIngredients({ name: ingredientValue.name })
-      .then(ingredients => {
-        setIngredients(ingredients)
+      .getingredient({ name: ingredientValue.name })
+      .then(ingredient => {
+        setingredient(ingredient)
       })
   }, [ingredientValue.name])
 
@@ -60,14 +60,14 @@ const RecipeEdit = ({ onItemDelete }) => {
         Tag,
         cooking_time,
         name,
-        ingredients,
+        ingredient,
         text
       } = res
       setRecipeText(text)
       setRecipeName(name)
       setRecipeTime(cooking_time)
       setRecipeFile(image)
-      setRecipeIngredients(ingredients)
+      setRecipeingredient(ingredient)
 
 
       const TagValueUpdated = value.map(item => {
@@ -94,7 +94,7 @@ const RecipeEdit = ({ onItemDelete }) => {
   const checkIfDisabled = () => {
     return recipeText === '' ||
     recipeName === '' ||
-    recipeIngredients.length === 0 ||
+    recipeingredient.length === 0 ||
     value.filter(item => item.value).length === 0 ||
     recipeTime === '' ||
     recipeFile === '' ||
@@ -116,7 +116,7 @@ const RecipeEdit = ({ onItemDelete }) => {
           const data = {
             text: recipeText,
             name: recipeName,
-            ingredients: recipeIngredients.map(item => ({
+            ingredient: recipeingredient.map(item => ({
               id: item.id,
               amount: item.amount
             })),
@@ -131,13 +131,13 @@ const RecipeEdit = ({ onItemDelete }) => {
               history.push(`/recipes/${id}`)
             })
             .catch(err => {
-              const { non_field_errors, ingredients, cooking_time } = err
-              console.log({  ingredients })
+              const { non_field_errors, ingredient, cooking_time } = err
+              console.log({  ingredient })
               if (non_field_errors) {
                 return alert(non_field_errors.join(', '))
               }
-              if (ingredients) {
-                return alert(`Ингредиенты: ${ingredients.filter(item => Object.keys(item).length).map(item => {
+              if (ingredient) {
+                return alert(`Ингредиенты: ${ingredient.filter(item => Object.keys(item).length).map(item => {
                   const error = item[Object.keys(item)[0]]
                   return error && error.join(' ,')
                 })[0]}`)
@@ -169,13 +169,13 @@ const RecipeEdit = ({ onItemDelete }) => {
           checkboxClassName={styles.checkboxGroupItem}
           handleChange={handleChange}
         />
-        <div className={styles.ingredients}>
-          <div className={styles.ingredientsInputs}>
+        <div className={styles.ingredient}>
+          <div className={styles.ingredientInputs}>
             <Input
               label='Ингредиенты'
-              className={styles.ingredientsNameInput}
-              inputClassName={styles.ingredientsInput}
-              labelClassName={styles.ingredientsLabel}
+              className={styles.ingredientNameInput}
+              inputClassName={styles.ingredientInput}
+              labelClassName={styles.ingredientLabel}
               onChange={e => {
                 const value = e.target.value
                 setIngredientValue({
@@ -184,14 +184,14 @@ const RecipeEdit = ({ onItemDelete }) => {
                 })
               }}
               onFocus={_ => {
-                setShowIngredients(true)
+                setShowingredient(true)
               }}
               value={ingredientValue.name}
             />
-            <div className={styles.ingredientsAmountInputContainer}>
+            <div className={styles.ingredientAmountInputContainer}>
               <Input
-                className={styles.ingredientsAmountInput}
-                inputClassName={styles.ingredientsAmountValue}
+                className={styles.ingredientAmountInput}
+                inputClassName={styles.ingredientAmountValue}
                 onChange={e => {
                   const value = e.target.value
                   setIngredientValue({
@@ -203,27 +203,27 @@ const RecipeEdit = ({ onItemDelete }) => {
               />
               {ingredientValue.measurement_unit !== '' && <div className={styles.measurementUnit}>{ingredientValue.measurement_unit}</div>}
             </div>
-            {showIngredients && ingredients.length > 0 && <IngredientsSearch
-              ingredients={ingredients}
+            {showingredient && ingredient.length > 0 && <ingredientSearch
+              ingredient={ingredient}
               onClick={({ id, name, measurement_unit }) => {
                 handleIngredientAutofill({ id, name, measurement_unit })
-                setIngredients([])
-                setShowIngredients(false)
+                setingredient([])
+                setShowingredient(false)
               }}
             />}
           </div>
-          <div className={styles.ingredientsAdded}>
-            {recipeIngredients.map(item => {
+          <div className={styles.ingredientAdded}>
+            {recipeingredient.map(item => {
               return <div
-                className={styles.ingredientsAddedItem}
+                className={styles.ingredientAddedItem}
               >
-                <span className={styles.ingredientsAddedItemTitle}>{item.name}</span> <span>-</span> <span>{item.amount}{item.measurement_unit}</span> <span
-                  className={styles.ingredientsAddedItemRemove}
+                <span className={styles.ingredientAddedItemTitle}>{item.name}</span> <span>-</span> <span>{item.amount}{item.measurement_unit}</span> <span
+                  className={styles.ingredientAddedItemRemove}
                   onClick={_ => {
-                    const recipeIngredientsUpdated = recipeIngredients.filter(ingredient => {
+                    const recipeingredientUpdated = recipeingredient.filter(ingredient => {
                       return ingredient.id !== item.id
                     })
-                    setRecipeIngredients(recipeIngredientsUpdated)
+                    setRecipeingredient(recipeingredientUpdated)
                   }}
                 >Удалить</span>
               </div>
@@ -233,7 +233,7 @@ const RecipeEdit = ({ onItemDelete }) => {
             className={styles.ingredientAdd}
             onClick={_ => {
               if (ingredientValue.amount === '' || ingredientValue.name === '') { return }
-              setRecipeIngredients([...recipeIngredients, ingredientValue])
+              setRecipeingredient([...recipeingredient, ingredientValue])
               setIngredientValue({
                 name: '',
                 id: null,
@@ -248,9 +248,9 @@ const RecipeEdit = ({ onItemDelete }) => {
         <div className={styles.cookingTime}>
           <Input
             label='Время приготовления'
-            className={styles.ingredientsTimeInput}
+            className={styles.ingredientTimeInput}
             labelClassName={styles.cookingTimeLabel}
-            inputClassName={styles.ingredientsTimeValue}
+            inputClassName={styles.ingredientTimeValue}
             onChange={e => {
               const value = e.target.value
               setRecipeTime(value)
