@@ -81,5 +81,4 @@ jobs:
             echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
             echo ALLOWED_HOSTS=${{ secrets.ALLOWED_HOSTS }} >> .env
             echo DEBUG=${{ secrets.DEBUG }} >> .env
-            echo SQLITE=${{ secrets.SQLITE }} >> .env
             sudo docker-compose up --force-recreate --build -d
