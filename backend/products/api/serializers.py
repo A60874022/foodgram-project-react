@@ -4,8 +4,8 @@ from rest_framework import serializers
 
 from recipes.models import (Favorite, Follow, Indigrient, IngredientAmount,
                             ListShopping, Recipe, Tag)
-
 from user.models import User
+
 from .fields import Base64ImageField
 
 

@@ -1,5 +1,6 @@
 from django.core.validators import MinValueValidator
 from django.db import models
+
 from user.models import User
 
 
@@ -8,7 +9,7 @@ class Indigrient(models.Model):
     name = models.CharField(max_length=200, verbose_name='Название',)
     measurement_unit = models.CharField(max_length=200,
                                         verbose_name='Еденица измерения')
- 
+
     class Meta:
         verbose_name = 'Продукт'
         verbose_name_plural = 'Продукты'
@@ -99,8 +100,8 @@ class Tag(models.Model):
     def __str__(self):
         return self.name
 
-class TagRecipe(models.Model):
 
+class TagRecipe(models.Model):
     tag = models.ForeignKey(
         Tag,
         on_delete=models.CASCADE,

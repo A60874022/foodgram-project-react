@@ -1,10 +1,12 @@
 from django.contrib import admin
+
 from recipes.models import (Favorite, Follow, Indigrient, IngredientAmount,
                             ListShopping, Recipe, Tag)
 
 
 class IndigrientInline(admin.StackedInline):
     model = Recipe.indigrient.through
+
 
 class TagtInline(admin.StackedInline):
     model = Recipe.tag.through
@@ -34,8 +36,7 @@ class RecipeAdmin(admin.ModelAdmin):
     search_fields = ('author', 'name', 'Tag',)
     list_filter = ('author', 'name', )
     empty_value_display = '-пусто-'
-    inlines = [IndigrientInline, TagtInline,]
-   
+    inlines = [IndigrientInline, TagtInline, ]
 
     @staticmethod
     def amount_tag(obj):
@@ -44,9 +45,6 @@ class RecipeAdmin(admin.ModelAdmin):
     @staticmethod
     def amount_ingredient(obj):
         return "\n".join([i[0] for i in obj.ingredient.values_list('name')])
-
-
-
 
 
 @admin.register(Tag)

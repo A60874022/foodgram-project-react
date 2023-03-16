@@ -1,14 +1,15 @@
 from http import HTTPStatus
 
-from api.filters import RecipeFilters
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from djoser.views import UserViewSet
-from recipes.models import (Favorite, Follow, Indigrient, ListShopping, Recipe,
-                            Tag)
 from rest_framework import filters, generics, mixins, permissions, viewsets
 from rest_framework.response import Response
+
+from api.filters import RecipeFilters
+from recipes.models import (Favorite, Follow, Indigrient, ListShopping, Recipe,
+                            Tag)
 from user.models import User
 
 from .pagination import ProductsPagination
