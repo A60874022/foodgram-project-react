@@ -43,13 +43,13 @@ jobs:
           tags: ${{ secrets.DOCKER_USERNAME }}/backend:latest
         
 
+   
   deploy:
     runs-on: ubuntu-latest
     needs: build_and_push_to_docker_hub
     steps:
-      - uses: actions/checkout@master
-      - name: copy file via ssh password
-        uses: appleboy/scp-action@master
+      - name: executing remote ssh commands to deploy
+        uses: appleboy/ssh-action@master
         with:
           source: "docker-compose.yaml, nginx.conf, openapi-schema.yml, redoc.html"
           target: "~/food"
