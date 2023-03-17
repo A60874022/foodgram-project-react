@@ -53,16 +53,7 @@ jobs:
            username: ${{ secrets.USER }}
            key: ${{ secrets.SSH_KEY }}
            passphrase: ${{ secrets.PASSPHRASE }}
-      - name: executing remote ssh commands to deploy
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USER }}
-          passphrase: ${{ secrets.PASSPHRASE }}
-          key: ${{ secrets.SSH_KEY }}
-          stack_file_name: docker-compose.yml
-          script: |
-            cd food
+           script: |
             sudo docker-compose stop
             sudo docker-compose pull backend
             rm .env
