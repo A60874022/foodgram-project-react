@@ -109,13 +109,13 @@ class Api {
     is_favorited = 0,
     is_in_shopping_cart = 0,
     author,
-    Tag
+    tags
   } = {}) {
       const token = localStorage.getItem('token')
       const authorization = token ? { 'authorization': `Token ${token}` } : {}
-      const TagString = Tag ? Tag.filter(tag => tag.value).map(tag => `&Tag=${tag.slug}`).join('') : ''
+      const tagsString = tags ? tags.filter(tag => tag.value).map(tag => `&tags=${tag.slug}`).join('') : ''
       return fetch(
-        `/api/recipes/?page=${page}&limit=${limit}${author ? `&author=${author}` : ''}${is_favorited ? `&is_favorited=${is_favorited}` : ''}${is_in_shopping_cart ? `&is_in_shopping_cart=${is_in_shopping_cart}` : ''}${TagString}`,
+        `/api/recipes/?page=${page}&limit=${limit}${author ? `&author=${author}` : ''}${is_favorited ? `&is_favorited=${is_favorited}` : ''}${is_in_shopping_cart ? `&is_in_shopping_cart=${is_in_shopping_cart}` : ''}${tagsString}`,
         {
           method: 'GET',
           headers: {
@@ -146,10 +146,10 @@ class Api {
   createRecipe ({
     name = '',
     image,
-    Tag = [],
+    tags = [],
     cooking_time = 0,
     text = '',
-    ingredient = []
+    ingredients = []
   }) {
     const token = localStorage.getItem('token')
     return fetch(
@@ -163,10 +163,10 @@ class Api {
         body: JSON.stringify({
           name,
           image,
-          Tag,
+          tags,
           cooking_time,
           text,
-          ingredient
+          ingredients
         })
       }
     ).then(this.checkResponse)
@@ -176,10 +176,10 @@ class Api {
     name,
     recipe_id,
     image,
-    Tag,
+    tags,
     cooking_time,
     text,
-    ingredient
+    ingredients
   }, wasImageUpdated) { // image was changed
     const token = localStorage.getItem('token')
     return fetch(
@@ -194,10 +194,10 @@ class Api {
           name,
           id: recipe_id,
           image: wasImageUpdated ? image : undefined,
-          Tag,
+          tags,
           cooking_time: Number(cooking_time),
           text,
-          ingredient
+          ingredients
         })
       }
     ).then(this.checkResponse)
@@ -314,11 +314,11 @@ class Api {
     ).then(this.checkResponse)
   }
 
-  // ingredient
-  getingredient ({ name }) {
+  // ingredients
+  getIngredients ({ name }) {
     const token = localStorage.getItem('token')
     return fetch(
-      `/api/ingredient/?name=${name}`,
+      `/api/ingredients/?name=${name}`,
       {
         method: 'GET',
         headers: {
@@ -328,11 +328,11 @@ class Api {
     ).then(this.checkResponse)
   }
 
-  // Tag
-  getTag () {
+  // tags
+  getTags () {
     const token = localStorage.getItem('token')
     return fetch(
-      `/api/Tag/`,
+      `/api/tags/`,
       {
         method: 'GET',
         headers: {

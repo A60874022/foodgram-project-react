@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { useTag } from './index.js'
+import { useTags } from './index.js'
 import api from '../api'
 
 export default function useRecipes () {
   const [ recipes, setRecipes ] = useState([])
   const [ recipesCount, setRecipesCount ] = useState(0)
   const [ recipesPage, setRecipesPage ] = useState(1)
-  const { value: TagValue, handleChange: handleTagChange, setValue: setTagValue } = useTag()
+  const { value: tagsValue, handleChange: handleTagsChange, setValue: setTagsValue } = useTags()
 
   const handleLike = ({ id, toLike = true }) => {
     const method = toLike ? api.addToFavorites.bind(api) : api.removeFromFavorites.bind(api)
@@ -54,10 +54,10 @@ export default function useRecipes () {
     setRecipesCount,
     recipesPage,
     setRecipesPage,
-    TagValue,
+    tagsValue,
     handleLike,
     handleAddToCart,
-    handleTagChange,
-    setTagValue
+    handleTagsChange,
+    setTagsValue
   }
 }

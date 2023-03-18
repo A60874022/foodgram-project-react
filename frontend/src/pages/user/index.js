@@ -15,7 +15,7 @@ import { useEffect, useState, useContext } from 'react'
 import api from '../../api'
 import { useParams, useHistory } from 'react-router-dom'
 import { UserContext } from '../../contexts'
-import MetaTag from 'react-meta-Tag'
+import MetaTags from 'react-meta-tags'
 
 const UserPage = ({ updateOrders }) => {
   const {
@@ -25,9 +25,9 @@ const UserPage = ({ updateOrders }) => {
     setRecipesCount,
     recipesPage,
     setRecipesPage,
-    TagValue,
-    setTagValue,
-    handleTagChange,
+    tagsValue,
+    setTagsValue,
+    handleTagsChange,
     handleLike,
     handleAddToCart
   } = useRecipes()
@@ -37,9 +37,9 @@ const UserPage = ({ updateOrders }) => {
   const history = useHistory()
   const userContext = useContext(UserContext)
 
-  const getRecipes = ({ page = 1, Tag }) => {
+  const getRecipes = ({ page = 1, tags }) => {
     api
-      .getRecipes({ page, author: id, Tag })
+      .getRecipes({ page, author: id, tags })
         .then(res => {
           const { results, count } = res
           setRecipes(results)
@@ -60,28 +60,28 @@ const UserPage = ({ updateOrders }) => {
 
   useEffect(_ => {
     if (!user) { return }
-    getRecipes({ page: recipesPage, Tag: TagValue, author: user.id })
-  }, [ recipesPage, TagValue, user ])
+    getRecipes({ page: recipesPage, tags: tagsValue, author: user.id })
+  }, [ recipesPage, tagsValue, user ])
 
   useEffect(_ => {
     getUser()
   }, [])
 
   useEffect(_ => {
-    api.getTag()
-      .then(Tag => {
-        setTagValue(Tag.map(tag => ({ ...tag, value: true })))
+    api.getTags()
+      .then(tags => {
+        setTagsValue(tags.map(tag => ({ ...tag, value: true })))
       })
   }, [])
 
 
   return <Main>
     <Container className={styles.container}>
-      <MetaTag>
+      <MetaTags>
         <title>{user ? `${user.first_name} ${user.last_name}` : 'Страница пользователя'}</title>
         <meta name="description" content={user ? `Продуктовый помощник - ${user.first_name} ${user.last_name}` : 'Продуктовый помощник - Страница пользователя'} />
         <meta property="og:title" content={user ? `${user.first_name} ${user.last_name}` : 'Страница пользователя'} />
-      </MetaTag>
+      </MetaTags>
       <div className={styles.title}>
         <Title
           className={cn({
@@ -90,10 +90,10 @@ const UserPage = ({ updateOrders }) => {
           title={user ? `${user.first_name} ${user.last_name}` : ''}
         />
         <CheckboxGroup
-          values={TagValue}
+          values={tagsValue}
           handleChange={value => {
             setRecipesPage(1)
-            handleTagChange(value)
+            handleTagsChange(value)
           }}
         />
       </div>

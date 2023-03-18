@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useTag } from './index.js'
+import { useTags } from './index.js'
 import api from '../api'
 
 export default function useRecipes () {

@@ -2,21 +2,21 @@
   margin: 0 auto 50px;
 }
 
-.ingredientInputs {
+.ingredientsInputs {
   position: relative;
   display: flex;
   justify-content: space-between;
 }
 
-.ingredientAmountInputContainer {
+.ingredientsAmountInputContainer {
   display: flex;
 }
 
-.ingredientInput {
+.ingredientsInput {
   width: 230px;
 }
 
-.ingredientLabel {
+.ingredientsLabel {
   min-width: 230px;
 }
 .measurementUnit {
@@ -24,12 +24,12 @@
   margin-left: 20px;
 }
 
-.ingredientAmountValue {
+.ingredientsAmountValue {
   max-width: 100px;
 }
 
-.ingredientNameInput,
-.ingredientAmountInput,
+.ingredientsNameInput,
+.ingredientsAmountInput,
 .measurementUnit {
   margin-bottom: 20px;
 }
@@ -41,7 +41,7 @@
   padding-left: 230px;
 }
 
-.ingredientAdded {
+.ingredientsAdded {
   padding-left: 230px;
   text-align: left;
 }
@@ -67,7 +67,7 @@
   min-width: 230px;
 }
 
-.ingredientAddedItemTitle {
+.ingredientsAddedItemTitle {
   max-width: 200px;
   white-space: nowrap;
   overflow: hidden;
@@ -76,17 +76,17 @@
   margin-right: 4px;
 }
 
-.ingredientAddedItem {
+.ingredientsAddedItem {
   margin-bottom: 20px;
   display: flex;
   align-items: center;
 }
 
-.ingredientTimeInput {
+.ingredientsTimeInput {
   margin-right: 10px;
 }
 
-.ingredientAddedItemRemove {
+.ingredientsAddedItemRemove {
   padding-left: 20px;
   color: red;
   cursor: pointer;
@@ -107,7 +107,7 @@
 }
 
 @media screen and (max-width: 820px) {
-  .ingredientInputs {
+  .ingredientsInputs {
     display: block;
     text-align: left;
   }
@@ -124,7 +124,7 @@
     margin-bottom: 10px;
   }
 
-  .checkboxGroupTag {
+  .checkboxGroupTags {
     display: block;
   }
 
@@ -137,7 +137,7 @@
     text-align: left;
   }
 
-  .ingredientAdded {
+  .ingredientsAdded {
     padding-left: 0px;
   }
 }

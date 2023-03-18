@@ -3,7 +3,7 @@ import styles from './styles.module.css'
 import { useRecipes } from '../../utils/index.js'
 import { useEffect } from 'react'
 import api from '../../api'
-import MetaTag from 'react-meta-Tag'
+import MetaTags from 'react-meta-tags'
 
 const HomePage = ({ updateOrders }) => {
   const {
@@ -13,17 +13,17 @@ const HomePage = ({ updateOrders }) => {
     setRecipesCount,
     recipesPage,
     setRecipesPage,
-    TagValue,
-    setTagValue,
-    handleTagChange,
+    tagsValue,
+    setTagsValue,
+    handleTagsChange,
     handleLike,
     handleAddToCart
   } = useRecipes()
 
 
-  const getRecipes = ({ page = 1, Tag }) => {
+  const getRecipes = ({ page = 1, tags }) => {
     api
-      .getRecipes({ page, Tag })
+      .getRecipes({ page, tags })
       .then(res => {
         const { results, count } = res
         setRecipes(results)
@@ -32,31 +32,31 @@ const HomePage = ({ updateOrders }) => {
   }
 
   useEffect(_ => {
-    getRecipes({ page: recipesPage, Tag: TagValue })
-  }, [recipesPage, TagValue])
+    getRecipes({ page: recipesPage, tags: tagsValue })
+  }, [recipesPage, tagsValue])
 
   useEffect(_ => {
-    api.getTag()
-      .then(Tag => {
-        setTagValue(Tag.map(tag => ({ ...tag, value: true })))
+    api.getTags()
+      .then(tags => {
+        setTagsValue(tags.map(tag => ({ ...tag, value: true })))
       })
   }, [])
 
 
   return <Main>
     <Container>
-      <MetaTag>
+      <MetaTags>
         <title>Рецепты</title>
         <meta name="description" content="Продуктовый помощник - Рецепты" />
         <meta property="og:title" content="Рецепты" />
-      </MetaTag>
+      </MetaTags>
       <div className={styles.title}>
         <Title title='Рецепты' />
         <CheckboxGroup
-          values={TagValue}
+          values={tagsValue}
           handleChange={value => {
             setRecipesPage(1)
-            handleTagChange(value)
+            handleTagsChange(value)
           }}
         />
       </div>

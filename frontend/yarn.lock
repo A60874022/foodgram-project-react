@@ -3628,9 +3628,9 @@ commander@^4.1.1:
   resolved "https://registry.yarnpkg.com/commander/-/commander-4.1.1.tgz#9fd602bd936294e9e9ef46a3f4d6964044b18068"
   integrity sha512-NOKm8xhkzAjzFx8B2v5OAHT+u5pRQc2UCa2Vq9jYL/31o2wi9mxBA7LIFs3sV5VSC49z6pEhfbMULvShKj26WA==
 
-common-Tag@^1.8.0:
+common-tags@^1.8.0:
   version "1.8.0"
-  resolved "https://registry.yarnpkg.com/common-Tag/-/common-Tag-1.8.0.tgz#8e3153e542d4a39e9b10554434afaaf98956a937"
+  resolved "https://registry.yarnpkg.com/common-tags/-/common-tags-1.8.0.tgz#8e3153e542d4a39e9b10554434afaaf98956a937"
   integrity sha512-6P6g0uetGpW/sdyUy/iQQCbFF0kWVMSIVSyYz7Zgjcgh8mgw8PQzDNZeyZ5DQ2gM7LBoZPHmnjz8rUthkBG5tw==
 
 commondir@^1.0.1:
@@ -4791,7 +4791,7 @@ eslint-plugin-jsx-a11y@^6.3.1:
     emoji-regex "^9.0.0"
     has "^1.0.3"
     jsx-ast-utils "^3.1.0"
-    language-Tag "^1.0.5"
+    language-tags "^1.0.5"
 
 eslint-plugin-react-hooks@^4.2.0:
   version "4.2.0"
@@ -7178,9 +7178,9 @@ language-subtag-registry@~0.3.2:
   resolved "https://registry.yarnpkg.com/language-subtag-registry/-/language-subtag-registry-0.3.21.tgz#04ac218bea46f04cb039084602c6da9e788dd45a"
   integrity sha512-L0IqwlIXjilBVVYKFT37X9Ih11Um5NEl9cbJIuU/SwP/zEEAbBPOnEeeuxVMf45ydWQRDQN3Nqc96OgbH1K+Pg==
 
-language-Tag@^1.0.5:
+language-tags@^1.0.5:
   version "1.0.5"
-  resolved "https://registry.yarnpkg.com/language-Tag/-/language-Tag-1.0.5.tgz#d321dbc4da30ba8bf3024e040fa5c14661f9193a"
+  resolved "https://registry.yarnpkg.com/language-tags/-/language-tags-1.0.5.tgz#d321dbc4da30ba8bf3024e040fa5c14661f9193a"
   integrity sha1-0yHbxNowuovzAk4ED6XBRmH5GTo=
   dependencies:
     language-subtag-registry "~0.3.2"
@@ -9470,9 +9470,9 @@ react-is@^17.0.1:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.1.tgz#5b3531bd76a645a4c9fb6e693ed36419e3301339"
   integrity sha512-NAnt2iGDXohE5LI7uBnLnqvLQMtzhkiAOLXTmv+qnF9Ky7xAPcX8Up/xWIhxvLVGJvuLiNc4xQLtuqDRzb4fSA==
 
-react-meta-Tag@^1.0.1:
+react-meta-tags@^1.0.1:
   version "1.0.1"
-  resolved "https://registry.yarnpkg.com/react-meta-Tag/-/react-meta-Tag-1.0.1.tgz#be18e88adafca280d6bd12839b530f9cfb7edbab"
+  resolved "https://registry.yarnpkg.com/react-meta-tags/-/react-meta-tags-1.0.1.tgz#be18e88adafca280d6bd12839b530f9cfb7edbab"
   integrity sha512-uylBI9UOI0QCGDsl6PlZaHnp+MxEpwslTlicPjnlcD68I8Kl2hdbuAZBRih+yU5StArSMB6T0jBrgst6rAuDYQ==
 
 react-refresh@^0.8.3:
@@ -11764,7 +11764,7 @@ workbox-build@^5.1.4:
     "@rollup/plugin-node-resolve" "^7.1.1"
     "@rollup/plugin-replace" "^2.3.1"
     "@surma/rollup-plugin-off-main-thread" "^1.1.1"
-    common-Tag "^1.8.0"
+    common-tags "^1.8.0"
     fast-json-stable-stringify "^2.1.0"
     fs-extra "^8.1.0"
     glob "^7.1.6"
