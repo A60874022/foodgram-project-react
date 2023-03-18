@@ -1,47 +1,80 @@
-version: '2.2'
-services:
-  db:
-    image: postgres:12.4
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
-    env_file:
-      - ./.env
+name: Foodgram Workflow
 
-  frontend:
-    image: anton60874022/foodgram_frontend
-    volumes:
-      - result_build:/app/result_build/build/
-    depends_on:
-      - backend
+on: [push]
 
-  nginx:
-    image: nginx:1.19.3
-    ports:
-      - '9003:9003'
-    volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf
-      - static_value:/var/html/static/
-      - media_value:/var/html/media/
-      - result_build:/usr/share/nginx/html/
-      - ./redoc.html:/usr/share/nginx/html/api/docs/redoc.html
-      - ./openapi-schema.yml:/usr/share/nginx/html/api/docs/openapi-schema.yml
-    restart: always
-    depends_on:
-      - backend
+jobs:
+  tests: 
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.7
 
-  backend:
-    image: anton60874022/foodgram_backend
-    restart: always
-    depends_on:
-      - db
-    volumes:
-      - static_value:/backend/static/
-      - media_value:/backend/media/
-    env_file:
-    - ./.env
+    - name: Install dependencies
+      run: | 
+        python -m pip install --upgrade pip 
+        pip install flake8 pep8-naming flake8-broken-line flake8-return flake8-isort
+        pip install -r backend/requirements.txt 
+    - name: Test with flake8
+      run: |
+        python -m flake8
+  build_and_push_to_docker_hub:
+    name: Push Docker image to Docker Hub
+    needs: tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Login to Docker
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Push frontend to Docker Hub 
+        uses: docker/build-push-action@v2 
+        with: 
+           context: ./frontend 
+           file: ./frontend/Dockerfile 
+           push: true 
+           tags: ${{ secrets.DOCKER_USERNAME }}/foodgram_frontend:v1
+      - name: Push backend to Docker Hub 
+        uses: docker/build-push-action@v2 
+        with: 
+           context: ./backend 
+           file: ./backend/Dockerfile 
+           push: true 
+           tags: ${{ secrets.DOCKER_USERNAME }}/foodgram_backend:v1
+        
 
-volumes:
-  result_build:
-  postgres_data:
-  static_value:
-  media_value:
+   
+  deploy: 
+     runs-on: ubuntu-latest 
+     needs: build_and_push_to_docker_hub 
+     steps: 
+       - name: executing remote ssh command to deploy 
+         uses: appleboy/ssh-action@master 
+         with: 
+           host: ${{ secrets.HOST }} 
+           username: ${{ secrets.USER }} 
+           key: ${{ secrets.SSH_KEY }} 
+           passphrase: ${{ secrets.PASSPHRASE }} 
+           script: | 
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram_frontend:v1 
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram_backend:v1 
+            sudo docker-compose stop 
+            sudo docker-compose rm backend 
+            sudo touch .env 
+            echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
+            echo DB_NAME=${{ secrets.DB_NAME }} >> .env
+            echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> .env
+            echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env
+            echo DB_HOST=${{ secrets.DB_HOST }} >> .env
+            echo DB_PORT=${{ secrets.DB_PORT }} >> .env
+            echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
+            echo ALLOWED_HOSTS=${{ secrets.ALLOWED_HOSTS }} >> .env
+            echo DEBUG=${{ secrets.DEBUG }} >> .env
+            sudo docker-compose up -d --build
