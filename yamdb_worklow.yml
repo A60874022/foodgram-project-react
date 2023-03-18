@@ -42,20 +42,23 @@ jobs:
           context: backend/
           tags: ${{ secrets.DOCKER_USERNAME }}/backend:latest
         
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build_and_push_to_docker_hub
-   steps:
-      - name: executing remote ssh commands to deploy
-        uses: appleboy/ssh-action@master
-        with:
-           host: ${{ secrets.HOST }}
-           username: ${{ secrets.USER }}
-           key: ${{ secrets.SSH_KEY }}
-           passphrase: ${{ secrets.PASSPHRASE }}
-      - name: executing remote ssh commands to deploy
-        uses: appleboy/ssh-action@master
-        with:
+    deploy: 
+     runs-on: ubuntu-latest 
+     needs: build_and_push_to_docker_hub 
+     steps: 
+       - name: executing remote ssh command to deploy 
+         uses: appleboy/ssh-action@master 
+         with: 
+           host: ${{ secrets.HOST }} 
+           username: ${{ secrets.USER }} 
+           key: ${{ secrets.SSH_KEY }} 
+           passphrase: ${{ secrets.PASSPHRASE }} 
+           script: | 
+             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram_frontend:v1 
+             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram_backend:v1 
+             sudo docker-compose stop 
+             sudo docker-compose rm backend 
+             sudo touch .env :
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           passphrase: ${{ secrets.PASSPHRASE }}
