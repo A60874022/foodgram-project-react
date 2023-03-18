@@ -48,9 +48,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: build_and_push_to_docker_hub
     steps:
-     - name: executing remote ssh commands to deploy
-       uses: appleboy/ssh-action@master
-       with:
+    - name: executing remote ssh commands to deploy
+      uses: anton60874022/ssh-action@master
+      with:
           local: infa
           remote: foodgram
           host: ${{ secrets.HOST }}
