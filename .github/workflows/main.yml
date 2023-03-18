@@ -35,34 +35,40 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-      - name: Push to Docker Hub Backend
-        uses: docker/build-push-action@v2
-        with:
-          push: true
-          context: backend/
-          tags: ${{ secrets.DOCKER_USERNAME }}/backend:latest
+      - name: Push frontend to Docker Hub 
+        uses: docker/build-push-action@v2 
+        with: 
+           context: ./frontend 
+           file: ./frontend/Dockerfile 
+           push: true 
+           tags: ${{ secrets.DOCKER_USERNAME }}/foodgram_frontend:v1 
+      - name: Push backend to Docker Hub 
+        uses: docker/build-push-action@v2 
+        with: 
+           context: ./backend 
+           file: ./backend/Dockerfile 
+           push: true 
+           tags: ${{ secrets.DOCKER_USERNAME }}/foodgram_backend:v1 
         
 
    
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build_and_push_to_docker_hub
-    steps:
-    - name: executing remote ssh commands to deploy
-      uses: A60874022/ssh-action@master
-      with:
-          local: infa
-          remote: foodgram
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USER }}
-          key: ${{ secrets.SSH_KEY }}
-          passphrase: ${{ secrets.PASSPHRASE }}
-          script: |
-            cd food
-            sudo docker-compose stop
-            sudo docker-compose pull backend
-            rm .env
-            touch .env
+  deploy: 
+     runs-on: ubuntu-latest 
+     needs: build_and_push_to_docker_hub 
+     steps: 
+       - name: executing remote ssh command to deploy 
+         uses: appleboy/ssh-action@master 
+         with: 
+           host: ${{ secrets.HOST }} 
+           username: ${{ secrets.USER }} 
+           key: ${{ secrets.SSH_KEY }} 
+           passphrase: ${{ secrets.PASSPHRASE }} 
+           script: | 
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram_frontend:v1 
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram_backend:v1 
+            sudo docker-compose stop 
+            sudo docker-compose rm backend 
+            sudo touch .env 
             echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
             echo DB_NAME=${{ secrets.DB_NAME }} >> .env
             echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> .env
