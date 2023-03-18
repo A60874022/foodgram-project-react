@@ -8,7 +8,7 @@ services:
       - ./.env
 
   frontend:
-    image: anton60874022/infra_frontend
+    image: anton60874022/foodgram_frontend
     volumes:
       - result_build:/app/result_build/build/
     depends_on:
@@ -30,7 +30,7 @@ services:
       - backend
 
   backend:
-    image: anton60874022/backend
+    image: anton60874022/foodgram_backend
     restart: always
     depends_on:
       - db
