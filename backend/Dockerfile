@@ -1,5 +1,7 @@
-FROM python:3.9.7-slim
-WORKDIR /backend
+
+WORKDIR /app
+COPY requirements.txt .
+RUN apt-get update && apt-get upgrade -y && \
+    pip install --upgrade pip && pip install -r requirements.txt
 COPY . .
-RUN pip install -r requirements.txt
 CMD ["gunicorn", "products.wsgi:application", "--bind", "0:8000"]
