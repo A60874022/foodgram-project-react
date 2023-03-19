@@ -172,3 +172,5 @@ DJOSER = {
         'current_user': 'api.serializers.UserSerializer',
     }
 }
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
