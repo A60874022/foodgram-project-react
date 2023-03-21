@@ -22,6 +22,7 @@ class UserSerializer(UserCreateSerializer):
     def get_is_subscribed(self, obj):
         return Follow.user(author__username=obj.username).exists()
 
+
 class TagSerializer(serializers.ModelSerializer):
     """Класс - сериализатор модели Tag."""
 
@@ -44,7 +45,7 @@ class RecipeSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True, read_only=True)
     author = UserSerializer(read_only=True)
     ingredients = IndigrientSerializer(source="ingredient_to_recipe",
-                                      many=True)
+                                       many=True)
     is_favorited = serializers.SerializerMethodField()
     is_in_shopping_cart = serializers.SerializerMethodField()
 
@@ -72,7 +73,7 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
     Класс - сериализатор для модели Recipe.
     Методы ["POST", "PATCH"]"""
     ingredients = IndigrientSerializer(source="ingredient_to_recipe",
-                                      many=True)
+                                       many=True)
     tags = TagSerializer(many=True, read_only=True)
     image = Base64ImageField()
     author = UserSerializer(read_only=True)
@@ -175,7 +176,6 @@ class FollowSerializer(serializers.ModelSerializer):
     def get_recipes(self, obj):
         queryset = Recipe.objects.filter(author__id=obj.id).order_by('id')
         return RecipeInfodSerializer(queryset, many=True)
-    
 
     def validate(self, data):
         author_id = self.context.get(
