@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from djoser.views import UserViewSet
 from rest_framework import filters, generics, mixins, permissions, viewsets
+from rest_framework.permissions import DjangoModelPermissions
 from rest_framework.response import Response
 
 from api.filters import RecipeFilters
@@ -33,7 +34,7 @@ class IndigrientViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = IndigrientSerializer
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name',)
-    permission_classes = (IsAuthenticatedOrReadOnly,)
+    permission_classes = (DjangoModelPermissions, IsAuthenticatedOrReadOnly, )
     pagination_class = None
 
 
@@ -67,7 +68,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     """Вьюсет для работе с моделью Recipe."""
     queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly, ]
+    permission_classes = (DjangoModelPermissions, IsAuthenticatedOrReadOnly, )
     filter_backends = [DjangoFilterBackend, ]
     filter_class = RecipeFilters
     serializer_class = RecipeSerializer

@@ -5,11 +5,11 @@ from recipes.models import (Favorite, Follow, Indigrient, IngredientAmount,
 
 
 class IndigrientInline(admin.StackedInline):
-    model = Recipe.indigrient.through
+    model = Recipe.indigrients.through
 
 
 class TagtInline(admin.StackedInline):
-    model = Recipe.tag.through
+    model = Recipe.tags.through
 
 
 @admin.register(Indigrient)
@@ -33,7 +33,7 @@ class IngredientAmountAdmin(admin.ModelAdmin):
 class RecipeAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'author',
                     'amount_tag', 'amount_ingredient')
-    search_fields = ('author', 'name', 'Tag',)
+    search_fields = ('author', 'name', 'tags',)
     list_filter = ('author', 'name', )
     empty_value_display = '-пусто-'
     inlines = [IndigrientInline, TagtInline, ]

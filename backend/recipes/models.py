@@ -30,13 +30,13 @@ class Recipe(models.Model):
         upload_to='recipes/',
     )
     text = models.TextField(verbose_name='Текст рецепта')
-    indigrient = models.ManyToManyField(
+    indigrients = models.ManyToManyField(
         Indigrient,
         through='IngredientAmount',
         verbose_name='Ингредиенты',
         related_name='recipes',
     )
-    tag = models.ManyToManyField(
+    tags = models.ManyToManyField(
         'Tag',
         through='TagRecipe',
         verbose_name='Теги',

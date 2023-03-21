@@ -9,9 +9,9 @@ app_name = 'api'
 
 router = DefaultRouter()
 router.register('users', CreateUserViewSet, basename='users')
-router.register('tags', TagViewSet, basename='tag')
+router.register('tags', TagViewSet, basename='tags')
 router.register('recipes', RecipeViewSet, basename='recipes')
-router.register('ingredient', IndigrientViewSet, basename='ingredient')
+router.register('ingredients', IndigrientViewSet, basename='ingredients')
 
 urlpatterns = [
     path('recipes/download_shopping_cart/',
