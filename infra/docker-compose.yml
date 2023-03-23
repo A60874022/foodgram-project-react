@@ -23,9 +23,6 @@ services:
       - '80:80'
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
-      - ..fronted/build:/usr/share/nginx/html/
-      - ./docs/:/usr/share/nginx/html/api/docs/
-
       - static_value:/var/html/static/
       - media_value:/var/html/media/
     restart: always
