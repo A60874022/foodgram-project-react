@@ -18,7 +18,7 @@ load_dotenv()
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
+#os.getenv('DEBUG', default=False)
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
@@ -27,7 +27,8 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'Optional default value')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-DEBUG = True #os.getenv('DEBUG', default=False)
+DEBUG = True
+
 
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', default='localhost')
 
@@ -83,13 +84,13 @@ WSGI_APPLICATION = 'products.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-'''if DEBUG:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        }
-    }'''
+#if DEBUG:
+#   DATABASES = {
+#       'default': {
+#           'ENGINE': 'django.db.backends.sqlite3',
+#           'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#        }
+#    }'''
 #else:
 DATABASES = {
         'default': {
