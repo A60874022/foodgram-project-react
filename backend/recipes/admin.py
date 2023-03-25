@@ -1,18 +1,18 @@
 from django.contrib import admin
 
-from recipes.models import (Favorite, Follow, Indigrient, IngredientAmount,
+from recipes.models import (Favorite, Follow, Ingredient, IngredientAmount,
                             ListShopping, Recipe, Tag)
 
 
-class IndigrientInline(admin.StackedInline):
-    model = Recipe.indigrients.through
+class IngredientInline(admin.StackedInline):
+    model = Recipe.ingredients.through
 
 
 class TagtInline(admin.StackedInline):
     model = Recipe.tags.through
 
 
-@admin.register(Indigrient)
+@admin.register(Ingredient)
 class IngredientAdmin(admin.ModelAdmin):
 
     list_display = ('name', 'measurement_unit')
@@ -23,7 +23,7 @@ class IngredientAdmin(admin.ModelAdmin):
 
 @admin.register(IngredientAmount)
 class IngredientAmountAdmin(admin.ModelAdmin):
-    list_display = ('recipe', 'indigrient')
+    list_display = ('recipe', 'ingredients')
     search_fields = ('recipe',)
     list_filter = ('recipe',)
     empty_value_display = '-пусто-'
@@ -31,20 +31,12 @@ class IngredientAmountAdmin(admin.ModelAdmin):
 
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'author',
-                    'amount_tag', 'amount_ingredient')
+    list_display = ('id', 'name', 'author', 'cooking_time')
     search_fields = ('author', 'name', 'tags',)
     list_filter = ('author', 'name', )
     empty_value_display = '-пусто-'
-    inlines = [IndigrientInline, TagtInline, ]
+    inlines = [IngredientInline, TagtInline, ]
 
-    @staticmethod
-    def amount_tag(obj):
-        return "\n".join([i[0] for i in obj.Tag.values_list('name')])
-
-    @staticmethod
-    def amount_ingredient(obj):
-        return "\n".join([i[0] for i in obj.ingredient.values_list('name')])
 
 
 @admin.register(Tag)

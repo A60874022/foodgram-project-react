@@ -4,7 +4,7 @@ from django.db import models
 from user.models import User
 
 
-class Indigrient(models.Model):
+class Ingredient(models.Model):
     """Класс для работы таблицы Ингредиент."""
     name = models.CharField(max_length=200, verbose_name='Название',)
     measurement_unit = models.CharField(max_length=200,
@@ -30,8 +30,8 @@ class Recipe(models.Model):
         upload_to='recipes/',
     )
     text = models.TextField(verbose_name='Текст рецепта')
-    indigrients = models.ManyToManyField(
-        Indigrient,
+    ingredients = models.ManyToManyField(
+        Ingredient,
         through='IngredientAmount',
         verbose_name='Ингредиенты',
         related_name='recipes',
@@ -66,11 +66,11 @@ class IngredientAmount(models.Model):
                                on_delete=models.CASCADE,
                                related_name='IngredientAmount',
                                verbose_name='Рецепт')
-    indigrient = models.ForeignKey(Indigrient,
+    ingredients = models.ForeignKey(Ingredient,
                                    on_delete=models.CASCADE,
                                    related_name='IngredientAmount',
                                    verbose_name='Ингредиент')
-    quantity = models.FloatField(verbose_name='количество', blank=True,
+    amount = models.FloatField(verbose_name='количество', blank=True,
                                  validators=(MinValueValidator(1,
                                                                'Минимальное'
                                                                'количество'
@@ -82,7 +82,7 @@ class IngredientAmount(models.Model):
         verbose_name_plural = 'Рецепт -интигриенты'
 
     def __str__(self):
-        return f'{self.recipe}{self.indigrient}'
+        return f'{self.recipe}{self.ingredients}'
 
 
 class Tag(models.Model):

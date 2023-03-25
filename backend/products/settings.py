@@ -30,7 +30,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'Optional default value')
 DEBUG = True
 
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', default='localhost')
+ALLOWED_HOSTS = ['*']#os.getenv('ALLOWED_HOSTS', default='localhost')
 
 
 # Application definition
@@ -84,15 +84,15 @@ WSGI_APPLICATION = 'products.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-# if DEBUG:
-#   DATABASES = {
-#       'default': {
-#           'ENGINE': 'django.db.backends.sqlite3',
-#           'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#        }
-#    }'''
-# else:
-DATABASES = {
+if DEBUG:
+   DATABASES = {
+       'default': {
+           'ENGINE': 'django.db.backends.sqlite3',
+           'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
+else:
+ DATABASES = {
         'default': {
             'ENGINE': os.getenv('DB_ENGINE',
                                 default='django.db.backends.postgresql'),
@@ -164,6 +164,7 @@ REST_FRAMEWORK = {
 }
 
 DJOSER = {
+    'HIDE_USERS': False,
     'PERMISSIONS': {
         'user_list': ['rest_framework.permissions.AllowAny'],
         'user': ['rest_framework.permissions.IsAuthenticated'],

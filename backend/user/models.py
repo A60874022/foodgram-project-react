@@ -14,7 +14,8 @@ class User(AbstractUser):
     email = models.EmailField('электронный адрес', max_length=254)
     first_name = models.CharField('Имя', max_length=150)
     last_name = models.CharField(max_length=150, verbose_name='Фамилия')
-
+    is_subscribed = models.BooleanField(
+        default=False)
     class Meta:
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
