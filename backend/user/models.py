@@ -16,6 +16,7 @@ class User(AbstractUser):
     last_name = models.CharField(max_length=150, verbose_name='Фамилия')
     is_subscribed = models.BooleanField(
         default=False)
+
     class Meta:
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'

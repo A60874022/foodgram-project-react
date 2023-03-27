@@ -14,10 +14,11 @@ router.register('recipes', RecipeViewSet, basename='recipes')
 router.register('ingredients', IngredientViewSet, basename='ingredients')
 
 urlpatterns = [
-    path('recipes/download_shopping_cart/',
-         DownloadCartViewSet.as_view(({'get': 'list'})), name='ListShopping'),
-    path('recipes/<int:id>/shopping_cart/', Cart.as_view(),
-         name='dowload_shopping_cart'),
+    path('recipes/download_shopping_cart/', Cart.as_view(),
+         name='ListShopping'),
+    path('recipes/<recipes_id>/shopping_cart/',
+         DownloadCartViewSet.as_view({'post': 'create',
+                                      'delete': 'delete'}), name='cart'),
     path('recipes/<int:id>/favorite/', FavoriteViewSet.as_view,
          name="favorite"),
     path('users/subscriptions/', FollowViewSet.as_view(({'get': 'list'}))),

@@ -67,15 +67,15 @@ class IngredientAmount(models.Model):
                                related_name='IngredientAmount',
                                verbose_name='Рецепт')
     ingredients = models.ForeignKey(Ingredient,
-                                   on_delete=models.CASCADE,
-                                   related_name='IngredientAmount',
-                                   verbose_name='Ингредиент')
+                                    on_delete=models.CASCADE,
+                                    related_name='IngredientAmount',
+                                    verbose_name='Ингредиент')
     amount = models.FloatField(verbose_name='количество', blank=True,
-                                 validators=(MinValueValidator(1,
-                                                               'Минимальное'
-                                                               'количество'
-                                                               'ингредиентов'
-                                                               '1'),),)
+                               validators=(MinValueValidator(1,
+                                                             'Минимальное'
+                                                             'количество'
+                                                             'ингредиентов'
+                                                             '1'),),)
 
     class Meta:
         verbose_name = 'Рецепт -интигриенты'
@@ -153,7 +153,7 @@ class ListShopping(models.Model):
                                verbose_name='рецепты')
     author = models.ForeignKey(User,
                                on_delete=models.CASCADE,
-                               related_name='ListShopping',
+                               related_name='purchases',
                                verbose_name='автор')
 
     class Meta:

@@ -38,7 +38,6 @@ class RecipeAdmin(admin.ModelAdmin):
     inlines = [IngredientInline, TagtInline, ]
 
 
-
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug')

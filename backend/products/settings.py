@@ -27,10 +27,10 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'Optional default value')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-DEBUG = True
+DEBUG = os.getenv('DEBUG', default=False)
 
 
-ALLOWED_HOSTS = ['*']#os.getenv('ALLOWED_HOSTS', default='localhost')
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', default='localhost')
 
 
 # Application definition
@@ -85,14 +85,12 @@ WSGI_APPLICATION = 'products.wsgi.application'
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 if DEBUG:
-   DATABASES = {
-       'default': {
-           'ENGINE': 'django.db.backends.sqlite3',
-           'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        }
-    }
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3')}}
 else:
- DATABASES = {
+    DATABASES = {
         'default': {
             'ENGINE': os.getenv('DB_ENGINE',
                                 default='django.db.backends.postgresql'),
