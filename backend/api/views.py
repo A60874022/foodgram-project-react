@@ -1,6 +1,7 @@
 import io
 from http import HTTPStatus
 
+from api.filters import RecipeFilters
 from django.http import FileResponse
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
@@ -13,8 +14,6 @@ from reportlab.pdfgen import canvas
 from rest_framework import filters, generics, mixins, permissions, viewsets
 from rest_framework.response import Response
 from user.models import User
-
-from api.filters import RecipeFilters
 
 from .pagination import ProductsPagination
 from .serializers import (FavoriteSerializer, FollowSerializer,
