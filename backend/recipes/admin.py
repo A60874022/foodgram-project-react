@@ -8,7 +8,7 @@ class IngredientInline(admin.StackedInline):
     model = Recipe.ingredients.through
 
 
-class TagtInline(admin.StackedInline):
+class TagInline(admin.StackedInline):
     model = Recipe.tags.through
 
 
@@ -35,7 +35,7 @@ class RecipeAdmin(admin.ModelAdmin):
     search_fields = ('author', 'name', 'tags',)
     list_filter = ('author', 'name', )
     empty_value_display = '-пусто-'
-    inlines = [IngredientInline, TagtInline, ]
+    inlines = [IngredientInline, TagInline, ]
 
 
 @admin.register(Tag)
