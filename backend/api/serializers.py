@@ -39,10 +39,11 @@ class TagSerializer(serializers.ModelSerializer):
 
 
 class IngredientSerializer(serializers.ModelSerializer):
-    id = serializers.PrimaryKeyRelatedField(
-        ueryset=IngredientAmount.objects.all(),
-        many=True)
     """Класс - сериализатор модели Ingredient."""
+    id = serializers.PrimaryKeyRelatedField(
+        queryset=IngredientAmount.objects.all(),
+        many=True)
+
     class Meta:
         model = IngredientAmount
         fields = ('id', 'amount')
