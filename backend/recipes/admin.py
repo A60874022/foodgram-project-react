@@ -1,7 +1,7 @@
 from django.contrib import admin
 
-from recipes.models import (Favorite, Follow, Ingredient, IngredientAmount,
-                            ListShopping, Recipe, Tag)
+from recipes.models import (Favorite, Ingredient, IngredientAmount,
+                            ListShopping, Recipe, Subscribe, Tag)
 
 
 class IngredientInline(admin.StackedInline):
@@ -60,8 +60,8 @@ class ListShoppingAdmin(admin.ModelAdmin):
     list_filter = ('author',)
 
 
-@admin.register(Follow)
-class FollowAdmin(admin.ModelAdmin):
-    list_display = ('user', 'author')
-    search_fields = ('author',)
-    list_filter = ('author',)
+@admin.register(Subscribe)
+class SubscribeAdmin(admin.ModelAdmin):
+    list_display = ('user', 'following')
+    search_fields = ('following',)
+    list_filter = ('following',)

@@ -163,22 +163,30 @@ class ListShopping(models.Model):
         return f'{self.author} {self.recipe}'
 
 
-class Follow(models.Model):
-    """Класс для работы таблицы подписки на авторов."""
-    user = models.ForeignKey(User, blank=True,
-                             on_delete=models.CASCADE,
-                             related_name='follower',
-                             verbose_name='подписчики')
-    author = models.ForeignKey(User, blank=True,
-                               on_delete=models.CASCADE,
-                               related_name='following',
-                               verbose_name='автор')
+class Subscribe(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='follower',
+        verbose_name='Пользователь',
+        help_text='Выберите пользователя, который подписывается'
+    )
+    following = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='following',
+        verbose_name='Автор',
+        help_text='Выберите автора, на которого подписываются'
+    )
 
     class Meta:
-        verbose_name = 'Подписчик'
-        verbose_name_plural = 'подписчики'
-        models.UniqueConstraint(fields=['user', ' author'],
-                                name='unique_subscribe')
+        verbose_name = 'Подписка'
+        verbose_name_plural = 'Подписки'
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'following'],
+                                    name='unique_subscribe')
+        ]
 
     def __str__(self):
-        return f'{self.user} {self.author}'
+
+        return f'{self.user} {self.following}'

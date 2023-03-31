@@ -2,11 +2,11 @@ import io
 from http import HTTPStatus
 
 from django.http import FileResponse
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_list_or_404, get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from djoser.views import UserViewSet
-from recipes.models import (Follow, Ingredient, IngredientAmount, ListShopping,
-                            Recipe, Tag)
+from recipes.models import (Favorite, Ingredient, IngredientAmount,
+                            ListShopping, Recipe, Subscribe, Tag)
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas
@@ -17,10 +17,11 @@ from user.models import User
 from api.filters import RecipeFilters
 
 from .pagination import ProductsPagination
-from .serializers import (FavoriteSerializer, FollowSerializer,
+from .serializers import (FavoriteSerializer, IngredientAmountSerializer,
                           IngredientSerializer, ListShoppingSerializer,
                           RecipeCreateSerializer, RecipeInfodSerializer,
-                          RecipeSerializer, TagSerializer, UserSerializer)
+                          RecipeSerializer, SubscriptionSerializer,
+                          TagSerializer, UserSerializer)
 
 
 class TagViewSet(viewsets.ReadOnlyModelViewSet):
@@ -44,8 +45,9 @@ class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
 class FavoriteViewSet(mixins.CreateModelMixin, mixins.DestroyModelMixin,
                       viewsets.GenericViewSet):
     """Вьюсет для работе с моделью Favorite."""
-    queryset = Recipe.objects.all()
     serializer_class = FavoriteSerializer
+    queryset = Favorite.objects.all()
+    model = Favorite
     permission_classes = (permissions.AllowAny,)
 
 
@@ -129,25 +131,27 @@ class RecipeViewSet(viewsets.ModelViewSet):
         return RecipeCreateSerializer
 
 
-class FollowViewSet(viewsets.ReadOnlyModelViewSet):
-    """Вьюсет для работе с моделью Follow."""
-    queryset = Recipe.objects.all()
-    serializer_class = RecipeInfodSerializer
+class SubscribeViewSet(viewsets.ModelViewSet):
+    serializer_class = SubscriptionSerializer
     permission_classes = (permissions.AllowAny,)
 
+    def get_queryset(self):
+        return get_list_or_404(User, following__user=self.request.user)
 
-class FollowCreateViewSet(mixins.DestroyModelMixin, mixins.CreateModelMixin,
-                          viewsets.GenericViewSet):
-    """Вьюсет для работе с моделью Follow."""
-    queryset = Follow.objects.all()
-    serializer_class = FollowSerializer
+    def create(self, request, *args, **kwargs):
 
-    def destroy(self, request, *args, **kwargs):
-        """Переопределение метода destroy."""
-        author_id = get_object_or_404(User, id=kwargs['users_id'])
+        user_id = self.kwargs.get('users_id')
+        user = get_object_or_404(User, id=user_id)
+        Subscribe.objects.create(
+            user=request.user, following=user)
+        return Response(HTTPStatus.CREATED)
+
+    def delete(self, request, *args, **kwargs):
+
+        author_id = self.kwargs['users_id']
         user_id = request.user.id
         subscribe = get_object_or_404(
-            Follow, user__id=user_id, following__id=author_id)
+            Subscribe, user__id=user_id, following__id=author_id)
         subscribe.delete()
         return Response(HTTPStatus.NO_CONTENT)
 
