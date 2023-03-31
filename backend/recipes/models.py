@@ -74,9 +74,8 @@ class IngredientAmount(models.Model):
         validators=[
             MinValueValidator(0, "Количество не может быть отрицательным"),
         ],
-        verbose_name="Количество",
-    )
-    
+        verbose_name="Количество")
+
     class Meta:
         verbose_name = 'Рецепт -интигриенты'
         verbose_name_plural = 'Рецепт -интигриенты'
