@@ -43,7 +43,6 @@ class IngredientSerializer(serializers.ModelSerializer):
     id = serializers.PrimaryKeyRelatedField(
         queryset=Ingredient.objects.all(),
         many=True)
-    amount = serializers.IntegerField(write_only=True)
 
     class Meta:
         model = IngredientAmount
