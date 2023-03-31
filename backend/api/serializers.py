@@ -41,9 +41,9 @@ class TagSerializer(serializers.ModelSerializer):
 class IngredientSerializer(serializers.ModelSerializer):
     """Класс - сериализатор модели Ingredient."""
     id = serializers.PrimaryKeyRelatedField(
-        queryset=IngredientAmount.objects.all(),
+        queryset=Ingredient.objects.all(),
         many=True)
-
+    amount = serializers.IntegerField(write_only=True)
     class Meta:
         model = IngredientAmount
         fields = ('id', 'amount')
@@ -56,7 +56,7 @@ class IngredientAmountSerializer(serializers.ModelSerializer):
     name = serializers.ReadOnlyField(source='ingredient.name')
     measurement_unit = serializers.ReadOnlyField(
         source='ingredient.measurement_unit', )
-
+    
     class Meta:
         model = IngredientAmount
         fields = ('id', 'name', 'measurement_unit', 'amount')
@@ -92,7 +92,10 @@ class RecipeSerializer(serializers.ModelSerializer):
 
 class RecipeCreateSerializer(serializers.ModelSerializer):
     """Сериализатор для создания рецепта."""
-    ingredients = IngredientSerializer()
+    ingredients =serializers.PrimaryKeyRelatedField(
+        many=True,
+        queryset=Ingredient.objects.all(),
+    )
     tags = serializers.PrimaryKeyRelatedField(
         many=True,
         queryset=Tag.objects.all(),
