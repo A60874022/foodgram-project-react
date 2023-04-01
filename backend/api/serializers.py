@@ -152,7 +152,7 @@ class ListShoppingSerializer(serializers.ModelSerializer):
     name = serializers.CharField()
     cooking_time = serializers.IntegerField()
     image = Base64ImageField(max_length=None, use_url=False,)
-    
+
     class Meta:
         model = Recipe
         fields = ('id', 'name', 'cooking_time', 'image')
