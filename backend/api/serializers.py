@@ -48,15 +48,11 @@ class IngredientSerializer(serializers.ModelSerializer):
 
 class IngredientAmountSerializer(serializers.ModelSerializer):
     """Класс - сериализатор для модели IngredientAmount."""
-    id = serializers.PrimaryKeyRelatedField(source='ingredient.id',
-                                            read_only=True)
-    name = serializers.ReadOnlyField(source='ingredient.name')
-    measurement_unit = serializers.ReadOnlyField(
-        source='ingredient.measurement_unit', )
+    ingredients = serializers.StringRelatedField(read_only=True)
 
     class Meta:
         model = IngredientAmount
-        fields = ('id', 'name', 'measurement_unit', 'amount')
+        fields = ('ingredients', 'amount',)
 
 
 class RecipeSerializer(serializers.ModelSerializer):
@@ -156,6 +152,10 @@ class ListShoppingSerializer(serializers.ModelSerializer):
     name = serializers.CharField()
     cooking_time = serializers.IntegerField()
     image = Base64ImageField(max_length=None, use_url=False,)
+    
+    class Meta:
+        model = Recipe
+        fields = ('id', 'name', 'cooking_time', 'image')
 
 
 class RecipeInfodSerializer(serializers.ModelSerializer):
