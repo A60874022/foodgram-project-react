@@ -123,6 +123,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.AllowAny,)
     filter_backends = [DjangoFilterBackend, ]
     filter_class = RecipeFilters
+    pagination_class = ProductsPagination
 
     def get_serializer_class(self):
         """Функция выбора класса - сериализатора в зависимости от метода"""

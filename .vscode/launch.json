@@ -11,8 +11,7 @@
                 "runserver"
             ],
             "django": true,
-            "justMyCode": true
-        },
+            "justMyCode": false        },
         {
             "name": "Python: Django",
             "type": "python",
@@ -22,8 +21,7 @@
                 "runserver"
             ],
             "django": true,
-            "justMyCode": true
-        },
+            "justMyCode": false        },
         {
             "name": "Python: Django",
             "type": "python",
@@ -33,8 +31,7 @@
                 "runserver"
             ],
             "django": true,
-            "justMyCode": true
-        },
+            "justMyCode": false        },
         {
             "args": [
                 "--extensionDevelopmentPath=${workspaceFolder}"
@@ -68,8 +65,7 @@
                 "runserver"
             ],
             "django": true,
-            "justMyCode": true
-        },
+            "justMyCode": false        },
         {
             "name": "Python: Django",
             "type": "python",
@@ -79,7 +75,6 @@
                 "runserver"
             ],
             "django": true,
-            "justMyCode": true
-        }
+            "justMyCode": false        }
     ]
 }
