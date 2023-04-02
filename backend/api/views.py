@@ -73,7 +73,7 @@ class DownloadCartViewSet(viewsets.ModelViewSet):
 
 
 class Cart(generics.ListAPIView):
-    """Вьюсет для работе с моделью Favorite."""
+    """Вьюсет для работе с моделью Cart."""
     def get(self, request):
         user = request.user
         shopping_cart = user.purchases.all()

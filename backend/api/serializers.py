@@ -83,11 +83,20 @@ class RecipeSerializer(serializers.ModelSerializer):
         return ListShopping.objects.filter(author=request.user).exists()
 
 
+class IngredienSreateSerializer(serializers.ModelSerializer):
+    """Класс - сериализатор для модели IngredientAmount."""
+    id = serializers.PrimaryKeyRelatedField(
+        queryset=Ingredient.objects.all())
+
+    class Meta:
+        model = IngredientAmount
+        fields = ('id', 'amount')
+
+
 class RecipeCreateSerializer(serializers.ModelSerializer):
     """Сериализатор для создания рецепта."""
-    ingredients = serializers.PrimaryKeyRelatedField(
+    ingredients = IngredienSreateSerializer(
         many=True,
-        queryset=Ingredient.objects.all(),
     )
     tags = serializers.PrimaryKeyRelatedField(
         many=True,
@@ -116,13 +125,21 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
                 'Время готовки должно быть не меньше одной минуты')
         return cooking_time
 
+    def get_ingredients(self, recipe, ingredients):
+        for ingredient in ingredients:
+            IngredientAmount.objects.create(
+                recipe=recipe,
+                id=ingredient.get('id'),
+                amount=ingredient.get('amount'),
+            )
+
     def create(self, validated_data):
         request = self.context.get('request', None)
         tags = validated_data.pop('tags')
         ingredients = validated_data.pop('ingredients')
         recipe = Recipe.objects.create(author=request.user, **validated_data)
         recipe.tags.set(tags)
-        recipe.ingredients.set(ingredients)
+        self.get_ingredients(recipe, ingredients)
         return recipe
 
     def update(self, instance, validated_data):
