@@ -135,6 +135,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
 class SubscribeViewSet(viewsets.ModelViewSet):
     serializer_class = SubscriptionSerializer
     permission_classes = (permissions.AllowAny,)
+    pagination_class = ProductsPagination
 
     def get_queryset(self):
         return get_list_or_404(User, following__user=self.request.user)
