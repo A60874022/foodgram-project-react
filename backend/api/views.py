@@ -119,7 +119,6 @@ class Cart(generics.ListAPIView):
 class RecipeViewSet(viewsets.ModelViewSet):
     """Вьюсет для работе с моделью Recipe."""
     queryset = Recipe.objects.all()
-    serializer_class = RecipeSerializer
     permission_classes = (permissions.AllowAny,)
     filter_backends = [DjangoFilterBackend, ]
     filter_class = RecipeFilters
@@ -129,7 +128,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
         """Функция выбора класса - сериализатора в зависимости от метода"""
         if self.request.method == "GET":
             return RecipeSerializer
-        return RecipeCreateSerializer
+        else:
+            return RecipeCreateSerializer
 
 
 class SubscribeViewSet(viewsets.ModelViewSet):
