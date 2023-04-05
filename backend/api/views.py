@@ -1,7 +1,7 @@
 import io
 from http import HTTPStatus
 
-from django.http import FileResponse, HttpResponse
+from django.http import FileResponse
 from django.shortcuts import get_list_or_404, get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from djoser.views import UserViewSet
@@ -104,11 +104,13 @@ class Cart(generics.ListAPIView):
         buffer.seek(0)
         return FileResponse(buffer, as_attachment=True,
                             filename='cart_list.pdf')
+    
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
     """Вьюсет для работе с моделью Recipe."""
     queryset = Recipe.objects.all()
+    serializer_class = RecipeSerializer
     permission_classes = (permissions.AllowAny,)
     filter_backends = [DjangoFilterBackend, ]
     filter_class = RecipeFilters
@@ -118,19 +120,18 @@ class RecipeViewSet(viewsets.ModelViewSet):
         """Функция выбора класса - сериализатора в зависимости от метода"""
         if self.request.method == "GET":
             return RecipeSerializer
-        else:
-            return RecipeCreateSerializer
+        return RecipeCreateSerializer
 
 
 class SubscribeViewSet(viewsets.ModelViewSet):
     serializer_class = SubscriptionSerializer
     permission_classes = (permissions.AllowAny,)
-    pagination_class = ProductsPagination
 
     def get_queryset(self):
         return get_list_or_404(User, following__user=self.request.user)
 
     def create(self, request, *args, **kwargs):
+
         user_id = self.kwargs.get('users_id')
         user = get_object_or_404(User, id=user_id)
         Subscribe.objects.create(
@@ -138,6 +139,7 @@ class SubscribeViewSet(viewsets.ModelViewSet):
         return Response(HTTPStatus.CREATED)
 
     def delete(self, request, *args, **kwargs):
+
         author_id = self.kwargs['users_id']
         user_id = request.user.id
         subscribe = get_object_or_404(

@@ -12,6 +12,8 @@ class Ingredient(models.Model):
     class Meta:
         verbose_name = 'Продукт'
         verbose_name_plural = 'Продукты'
+        models.UniqueConstraint(fields=['name', 'following'],
+                                name='measurement_unit')
 
     def __str__(self):
         return self.name
@@ -63,10 +65,10 @@ class IngredientAmount(models.Model):
                                on_delete=models.CASCADE,
                                related_name='IngredientRecipe',
                                verbose_name='Рецепт')
-    ingredient = models.ForeignKey(Ingredient,
-                                   on_delete=models.CASCADE,
-                                   related_name='IngredientAmount',
-                                   verbose_name='Ингредиент')
+    ingredients = models.ForeignKey(Ingredient,
+                                    on_delete=models.CASCADE,
+                                    related_name='IngredientAmount',
+                                    verbose_name='Ингредиент')
     amount = models.PositiveIntegerField(
         default=0,
         validators=[
@@ -79,7 +81,7 @@ class IngredientAmount(models.Model):
         verbose_name_plural = 'Рецепт -интигриенты'
 
     def __str__(self):
-        return f'{self.recipe}{self.ingredient}'
+        return f'{self.recipe}{self.ingredients}'
 
 
 class Tag(models.Model):

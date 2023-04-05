@@ -43,18 +43,16 @@ class IngredientSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Ingredient
-        fields = ('id', 'name', 'measurement_unit')
-        extra_kwargs = {'name': {'required': False},
-                        'measurement_unit': {'required': False}}
+        fields = ('id', 'name', 'measurement_unit', )
 
 
 class IngredientAmountSerializer(serializers.ModelSerializer):
     """Класс - сериализатор для модели IngredientAmount."""
-    amount = serializers.StringRelatedField(read_only=True, source='*')
+    ingredients = serializers.StringRelatedField(read_only=True)
 
     class Meta:
-        model = Ingredient
-        fields = ('name', 'measurement_unit', 'id', 'amount')
+        model = IngredientAmount
+        fields = ('ingredients', 'amount',)
 
 
 class RecipeSerializer(serializers.ModelSerializer):
@@ -68,7 +66,7 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Recipe
-        fields = ('tags', 'author', 'ingredients',
+        fields = ('id', 'tags', 'author', 'ingredients',
                   'is_favorited', 'is_in_shopping_cart',
                   'name', 'image', 'text', 'cooking_time')
 
@@ -85,10 +83,10 @@ class RecipeSerializer(serializers.ModelSerializer):
         return ListShopping.objects.filter(author=request.user).exists()
 
 
-class AddIngredienSerializer(serializers.ModelSerializer):
+class IngredienSreateSerializer(serializers.ModelSerializer):
     """Класс - сериализатор для модели IngredientAmount."""
     id = serializers.PrimaryKeyRelatedField(
-        queryset=Ingredient.objects.all(), source='ingredients')
+        queryset=Ingredient.objects.all())
 
     class Meta:
         model = IngredientAmount
@@ -97,7 +95,9 @@ class AddIngredienSerializer(serializers.ModelSerializer):
 
 class RecipeCreateSerializer(serializers.ModelSerializer):
     """Сериализатор для создания рецепта."""
-    ingredients = AddIngredienSerializer(many=True)
+    ingredients = IngredienSreateSerializer(
+        many=True,
+    )
     tags = serializers.PrimaryKeyRelatedField(
         many=True,
         queryset=Tag.objects.all(),
@@ -109,7 +109,7 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recipe
         fields = (
-            'ingredients', 'tags', 'author', 'id',
+            'id', 'tags', 'author', 'ingredients',
             'name', 'image', 'text', 'cooking_time',)
 
     def validate_tags(self, tags):
@@ -126,11 +126,11 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
         return cooking_time
 
     def get_ingredients(self, recipe, ingredients):
-        for ing in ingredients:
+        for ingredient in ingredients:
             IngredientAmount.objects.create(
                 recipe=recipe,
-                ingredient=ing.get('ingredients'),
-                amount=ing.get('amount'),
+                id=ingredient.get('id'),
+                amount=ingredient.get('amount'),
             )
 
     def create(self, validated_data):
@@ -147,12 +147,8 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
         IngredientAmount.objects.filter(recipe=instance).delete()
         instance.tags.set(validated_data.pop('tags'))
         ingredients = validated_data.pop('ingredients')
-        self.create_ingredient(instance, ingredients)
+        self.create_ingredients(instance, ingredients)
         return super().update(instance, validated_data)
-
-    def to_representation(self, instatnce):
-        context = {'request': self.context.get('request')}
-        return RecipeSerializer(instatnce, context=context).data
 
 
 class FavoriteSerializer(serializers.ModelSerializer):
@@ -173,6 +169,10 @@ class ListShoppingSerializer(serializers.ModelSerializer):
     name = serializers.CharField()
     cooking_time = serializers.IntegerField()
     image = Base64ImageField(max_length=None, use_url=False,)
+
+    class Meta:
+        model = Recipe
+        fields = ('id', 'name', 'cooking_time', 'image')
 
 
 class RecipeInfodSerializer(serializers.ModelSerializer):
