@@ -82,10 +82,11 @@ class Cart(generics.ListAPIView):
             recipe_id__in=list_filter)
         recipes = {}
         for ingredient_mount in recipe_filter:
+            z = ingredient_mount.amount
             if ingredient_mount.ingredients in recipes:
-                recipes[ingredient_mount.ingredients] += ingredient_mount.amount
+                recipes[ingredient_mount.ingredients] += z
             else:
-                recipes[ingredient_mount.ingredients] = ingredient_mount.amount
+                recipes[ingredient_mount.ingredients] = z
         wishlist = []
         wishlist.append('Список покупок:')
         for k, v in recipes.items():
