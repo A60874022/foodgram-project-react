@@ -1,7 +1,7 @@
 import io
 from http import HTTPStatus
 
-from django.http import FileResponse
+from django.http import FileResponse, HttpResponse
 from django.shortcuts import get_list_or_404, get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from djoser.views import UserViewSet
@@ -76,37 +76,27 @@ class Cart(generics.ListAPIView):
     """Вьюсет для работе с моделью Cart."""
     def get(self, request):
         user = request.user
-        shopping_cart = user.purchases.all()
-        buying_list = {}
-        for record in shopping_cart:
-            recipe = record.recipe
-            ingredients = IngredientAmount.objects.filter(recipe=recipe)
-            for ingredient in ingredients:
-                amount = ingredient.amount
-                name = ingredient.ingredient.name
-                measurement_unit = ingredient.ingredient.measurement_unit
-                if name not in buying_list:
-                    buying_list[name] = {
-                        'measurement_unit': measurement_unit,
-                        'amount': amount
-                    }
-                else:
-                    buying_list[name]['amount'] = (buying_list[name]['amount']
-                                                   + amount)
-        shoping_list = []
-        shoping_list.append('Список покупок:')
-        for item in buying_list:
-            shoping_list.append(f'{item} - {buying_list[item]["amount"]} '
-                                f'{buying_list[item]["measurement_unit"]}')
-        shoping_list.append(' ')
-        shoping_list.append('FoodGram, 2022')
+        list_filter = (ListShopping.objects.filter(author_id=user.id).
+                       values_list("recipe", flat=True))
+        recipe_filter = IngredientAmount.objects.filter(
+            recipe_id__in=list_filter)
+        recipes = {}
+        for ingredient_mount in recipe_filter:
+            if ingredient_mount.ingredient in recipes:
+                recipes[ingredient_mount.ingredient] += ingredient_mount.amount
+            else:
+                recipes[ingredient_mount.ingredient] = ingredient_mount.amount
+        wishlist = []
+        wishlist.append('Список покупок:')
+        for k, v in recipes.items():
+            wishlist.append(f'{k.name} - {v}, {k.measurement_unit}\n')
         pdfmetrics.registerFont(TTFont('DejaVuSerif',
                                        './api/ttf/DejaVuSerif.ttf'))
         buffer = io.BytesIO()
         p = canvas.Canvas(buffer)
         p.setFont("DejaVuSerif", 15)
         start = 800
-        for line in shoping_list:
+        for line in wishlist:
             p.drawString(50, start, line)
             start -= 20
         p.showPage()
@@ -141,7 +131,6 @@ class SubscribeViewSet(viewsets.ModelViewSet):
         return get_list_or_404(User, following__user=self.request.user)
 
     def create(self, request, *args, **kwargs):
-
         user_id = self.kwargs.get('users_id')
         user = get_object_or_404(User, id=user_id)
         Subscribe.objects.create(
@@ -149,7 +138,6 @@ class SubscribeViewSet(viewsets.ModelViewSet):
         return Response(HTTPStatus.CREATED)
 
     def delete(self, request, *args, **kwargs):
-
         author_id = self.kwargs['users_id']
         user_id = request.user.id
         subscribe = get_object_or_404(

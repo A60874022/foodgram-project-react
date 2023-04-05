@@ -23,7 +23,7 @@ class IngredientAdmin(admin.ModelAdmin):
 
 @admin.register(IngredientAmount)
 class IngredientAmountAdmin(admin.ModelAdmin):
-    list_display = ('recipe', 'ingredients')
+    list_display = ('recipe', 'ingredient')
     search_fields = ('recipe',)
     list_filter = ('recipe',)
     empty_value_display = '-пусто-'

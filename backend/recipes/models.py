@@ -63,10 +63,10 @@ class IngredientAmount(models.Model):
                                on_delete=models.CASCADE,
                                related_name='IngredientRecipe',
                                verbose_name='Рецепт')
-    ingredients = models.ForeignKey(Ingredient,
-                                    on_delete=models.CASCADE,
-                                    related_name='IngredientAmount',
-                                    verbose_name='Ингредиент')
+    ingredient = models.ForeignKey(Ingredient,
+                                   on_delete=models.CASCADE,
+                                   related_name='IngredientAmount',
+                                   verbose_name='Ингредиент')
     amount = models.PositiveIntegerField(
         default=0,
         validators=[
@@ -79,7 +79,7 @@ class IngredientAmount(models.Model):
         verbose_name_plural = 'Рецепт -интигриенты'
 
     def __str__(self):
-        return f'{self.recipe}{self.ingredients}'
+        return f'{self.recipe}{self.ingredient}'
 
 
 class Tag(models.Model):

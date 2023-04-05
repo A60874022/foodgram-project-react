@@ -68,7 +68,7 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Recipe
-        fields = ('id', 'tags', 'author', 'ingredients',
+        fields = ('tags', 'author', 'ingredients',
                   'is_favorited', 'is_in_shopping_cart',
                   'name', 'image', 'text', 'cooking_time')
 
@@ -126,11 +126,11 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
         return cooking_time
 
     def get_ingredients(self, recipe, ingredients):
-        for ingredient in ingredients:
+        for ing in ingredients:
             IngredientAmount.objects.create(
                 recipe=recipe,
-                ingredients=ingredient.get('ingredients'),
-                amount=ingredient.get('amount'),
+                ingredient=ing.get('ingredients'),
+                amount=ing.get('amount'),
             )
 
     def create(self, validated_data):
@@ -147,7 +147,7 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
         IngredientAmount.objects.filter(recipe=instance).delete()
         instance.tags.set(validated_data.pop('tags'))
         ingredients = validated_data.pop('ingredients')
-        self.create_ingredients(instance, ingredients)
+        self.create_ingredient(instance, ingredients)
         return super().update(instance, validated_data)
 
     def to_representation(self, instatnce):
