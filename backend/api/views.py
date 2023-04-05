@@ -82,10 +82,10 @@ class Cart(generics.ListAPIView):
             recipe_id__in=list_filter)
         recipes = {}
         for ingredient_mount in recipe_filter:
-            if ingredient_mount.ingredient in recipes:
-                recipes[ingredient_mount.ingredient] += ingredient_mount.amount
+            if ingredient_mount.ingredients in recipes:
+                recipes[ingredient_mount.ingredients] += ingredient_mount.amount
             else:
-                recipes[ingredient_mount.ingredient] = ingredient_mount.amount
+                recipes[ingredient_mount.ingredients] = ingredient_mount.amount
         wishlist = []
         wishlist.append('Список покупок:')
         for k, v in recipes.items():
@@ -125,6 +125,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
 class SubscribeViewSet(viewsets.ModelViewSet):
     serializer_class = SubscriptionSerializer
     permission_classes = (permissions.AllowAny,)
+    pagination_class = ProductsPagination
 
     def get_queryset(self):
         return get_list_or_404(User, following__user=self.request.user)
