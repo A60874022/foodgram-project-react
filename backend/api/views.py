@@ -104,7 +104,6 @@ class Cart(generics.ListAPIView):
         buffer.seek(0)
         return FileResponse(buffer, as_attachment=True,
                             filename='cart_list.pdf')
-    
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
