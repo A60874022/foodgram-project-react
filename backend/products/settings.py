@@ -27,6 +27,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'Optional default value')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
+
 DEBUG = os.getenv('DEBUG', default=False)
 
 
