@@ -31,7 +31,7 @@ class UserCreateSerializer(UserCreateSerializer):
 
 
 class TagSerializer(serializers.ModelSerializer):
-    """Класс - сериализатор модели Tag."""
+    """Класс - сериализатор модели Tag"""
 
     class Meta:
         model = Tag
