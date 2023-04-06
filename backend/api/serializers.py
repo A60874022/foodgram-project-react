@@ -21,7 +21,7 @@ class UserSerializer(UserCreateSerializer):
 
 
 class UserCreateSerializer(UserCreateSerializer):
-    """ Сериализатор создания пользователя """
+    """ Сериализатор создания пользователя."""
 
     class Meta:
         model = User
