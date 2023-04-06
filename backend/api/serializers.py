@@ -48,11 +48,11 @@ class IngredientSerializer(serializers.ModelSerializer):
 
 class IngredientAmountSerializer(serializers.ModelSerializer):
     """Класс - сериализатор для модели IngredientAmount."""
-    ingredients = serializers.StringRelatedField(read_only=True)
+    amount = serializers.StringRelatedField(read_only=True, source = '*')
 
     class Meta:
-        model = IngredientAmount
-        fields = ('ingredients', 'amount',)
+        model = Ingredient
+        fields = ('id', 'name', 'measurement_unit', 'amount',)
 
 
 class RecipeSerializer(serializers.ModelSerializer):
