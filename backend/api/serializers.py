@@ -48,7 +48,7 @@ class IngredientSerializer(serializers.ModelSerializer):
 
 class IngredientAmountSerializer(serializers.ModelSerializer):
     """Класс - сериализатор для модели IngredientAmount."""
-    amount = serializers.StringRelatedField(read_only=True, source = '*')
+    amount = serializers.StringRelatedField(read_only=True, source='*')
 
     class Meta:
         model = Ingredient
