@@ -22,7 +22,7 @@ class Ingredient(models.Model):
 class Recipe(models.Model):
     """Класс для работы таблицы Рецепты."""
     author = models.ForeignKey(User, on_delete=models.CASCADE,
-                               verbose_name='Автор рецепта')
+                               verbose_name='Автор рецепта', )
     name = models.CharField(max_length=200, verbose_name='Название',)
     image = models.ImageField(
         verbose_name='Картинка',
