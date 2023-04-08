@@ -5,16 +5,16 @@ from django.http import FileResponse
 from django.shortcuts import get_list_or_404, get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from djoser.views import UserViewSet
-from recipes.models import (Favorite, Ingredient, IngredientAmount,
-                            ListShopping, Recipe, Subscribe, Tag)
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas
 from rest_framework import filters, generics, mixins, permissions, viewsets
 from rest_framework.response import Response
-from user.models import User
 
 from api.filters import RecipeFilters
+from recipes.models import (Favorite, Ingredient, IngredientAmount,
+                            ListShopping, Recipe, Subscribe, Tag)
+from user.models import User
 
 from .pagination import ProductsPagination
 from .serializers import (FavoriteSerializer, IngredientAmountSerializer,
@@ -39,7 +39,6 @@ class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name',)
     permission_classes = (permissions.AllowAny,)
-    pagination_class = None
 
 
 class FavoriteViewSet(mixins.CreateModelMixin, mixins.DestroyModelMixin,

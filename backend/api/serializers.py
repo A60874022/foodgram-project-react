@@ -1,7 +1,8 @@
 from djoser.serializers import UserCreateSerializer
+from rest_framework import serializers
+
 from recipes.models import (Ingredient, IngredientAmount, ListShopping, Recipe,
                             Subscribe, Tag)
-from rest_framework import serializers
 from user.models import User
 
 from .fields import Base64ImageField
@@ -48,18 +49,24 @@ class IngredientSerializer(serializers.ModelSerializer):
 
 class IngredientAmountSerializer(serializers.ModelSerializer):
     """Класс - сериализатор для модели IngredientAmount."""
-    amount = serializers.StringRelatedField(read_only=True, source='*')
+    name = serializers.CharField(
+        source='ingredients.name', read_only=True)
+    id = serializers.PrimaryKeyRelatedField(
+        source='ingredients.id', read_only=True)
+    measurement_unit = serializers.CharField(
+        source='ingredients.measurement_unit', read_only=True)
 
     class Meta:
-        model = Ingredient
-        fields = ('id', 'name', 'measurement_unit', 'amount',)
+        model = IngredientAmount
+        fields = ('id', 'name', 'measurement_unit', 'amount')
 
 
 class RecipeSerializer(serializers.ModelSerializer):
     """Класс - сериализатор модели Recipe."""
     tags = TagSerializer(many=True)
     author = UserSerializer()
-    ingredients = IngredientAmountSerializer(many=True)
+    ingredients = IngredientAmountSerializer(source='IngredientAmount',
+                                             many=True)
     is_favorited = serializers.SerializerMethodField()
     is_in_shopping_cart = serializers.SerializerMethodField()
     image = Base64ImageField(max_length=None)
@@ -83,12 +90,12 @@ class RecipeSerializer(serializers.ModelSerializer):
         return ListShopping.objects.filter(author=request.user).exists()
 
 
-class IngredienSreateSerializer(serializers.ModelSerializer):
-    id = serializers.PrimaryKeyRelatedField(queryset=Ingredient.objects.all())
-    """Класс - сериализатор для модели IngredientAmount."""
+class IngredienSreateSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    amount = serializers.IntegerField()
+
     class Meta:
-        model = IngredientAmount
-        fields = ('id', 'amount')
+        fields = ('id', 'amount',)
 
 
 class RecipeCreateSerializer(serializers.ModelSerializer):
@@ -123,7 +130,7 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
         for ingredient in ingredients:
             IngredientAmount.objects.create(
                 recipe=recipe,
-                ingredients=ingredient.get('id'),
+                ingredients_id=ingredient.get('id'),
                 amount=ingredient.get('amount')
             )
 
