@@ -153,12 +153,20 @@ class FavoriteSerializer(serializers.Serializer):
     cooking_time = serializers.IntegerField()
     image = Base64ImageField(max_length=None, use_url=False,)
 
+    def to_representation(self, instance):
+        context = {'request': self.context.get('request')}
+        return RecipeMinifieldSerializer(instance, context=context).data
+
 
 class CartSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     name = serializers.CharField()
     cooking_time = serializers.IntegerField()
     image = Base64ImageField(max_length=None, use_url=False,)
+
+    def to_representation(self, instance):
+        context = {'request': self.context.get('request')}
+        return RecipeMinifieldSerializer(instance, context=context).data
 
 
 class RecipeInfodSerializer(serializers.ModelSerializer):
