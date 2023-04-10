@@ -1,6 +1,6 @@
 from djoser.serializers import UserCreateSerializer
-from recipes.models import (Favorite, Ingredient, IngredientAmount,
-                            ListShopping, Recipe, Subscribe, Tag)
+from recipes.models import (Cart, Favorite, Ingredient, IngredientAmount,
+                            Recipe, Subscribe, Tag)
 from rest_framework import serializers
 from user.models import User
 
@@ -86,7 +86,7 @@ class RecipeSerializer(serializers.ModelSerializer):
         request = self.context.get('request')
         if not request or request.user.is_anonymous:
             return False
-        return ListShopping.objects.filter(author=request.user).exists()
+        return Cart.objects.filter(user=request.user).exists()
 
 
 class IngredienSreateSerializer(serializers.Serializer):
@@ -153,11 +153,8 @@ class FavoriteSerializer(serializers.Serializer):
     cooking_time = serializers.IntegerField()
     image = Base64ImageField(max_length=None, use_url=False,)
 
-    """Класс - сериализатор для модели Favorite."""
 
-
-class ListShoppingSerializer(serializers.Serializer):
-    """Класс - сериализатор для модели ListShopping."""
+class CartSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     name = serializers.CharField()
     cooking_time = serializers.IntegerField()
