@@ -5,16 +5,16 @@ from django.http import FileResponse
 from django.shortcuts import get_list_or_404, get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from djoser.views import UserViewSet
+from recipes.models import (Favorite, Ingredient, IngredientAmount,
+                            ListShopping, Recipe, Subscribe, Tag)
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas
 from rest_framework import filters, generics, mixins, permissions, viewsets
 from rest_framework.response import Response
+from user.models import User
 
 from api.filters import RecipeFilters
-from recipes.models import (Favorite, Ingredient, IngredientAmount,
-                            ListShopping, Recipe, Subscribe, Tag)
-from user.models import User
 
 from .pagination import ProductsPagination
 from .serializers import (FavoriteSerializer, IngredientAmountSerializer,
@@ -48,6 +48,21 @@ class FavoriteViewSet(mixins.CreateModelMixin, mixins.DestroyModelMixin,
     queryset = Favorite.objects.all()
     model = Favorite
     permission_classes = (permissions.AllowAny,)
+
+    def create(self, request, *args, **kwargs):
+        recipe_id = int(self.kwargs['recipes_id'])
+        recipe = get_object_or_404(Recipe, id=recipe_id)
+        self.model.objects.create(
+             user=request.user, recipe=recipe)
+        return Response(HTTPStatus.CREATED)
+
+    def delete(self, request, *args, **kwargs):
+        recipe_id = self.kwargs['recipes_id']
+        user_id = request.user.id
+        object = get_object_or_404(
+            self.model, user__id=user_id, recipe__id=recipe_id)
+        object.delete()
+        return Response(HTTPStatus.NO_CONTENT)
 
 
 class DownloadCartViewSet(viewsets.ModelViewSet):

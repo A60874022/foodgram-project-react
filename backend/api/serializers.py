@@ -1,8 +1,7 @@
 from djoser.serializers import UserCreateSerializer
+from recipes.models import (Favorite, Ingredient, IngredientAmount,
+                            ListShopping, Recipe, Subscribe, Tag)
 from rest_framework import serializers
-
-from recipes.models import (Ingredient, IngredientAmount, ListShopping, Recipe,
-                            Subscribe, Tag)
 from user.models import User
 
 from .fields import Base64ImageField
@@ -81,7 +80,7 @@ class RecipeSerializer(serializers.ModelSerializer):
         request = self.context.get('request')
         if not request or request.user.is_anonymous:
             return False
-        return obj.Favorite.filter(user=request.user).exists()
+        return Favorite.objects.filter(user=request.user).exists()
 
     def get_is_in_shopping_cart(self, obj):
         request = self.context.get('request')
@@ -148,28 +147,21 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
         return RecipeSerializer(instance, context=context).data
 
 
-class FavoriteSerializer(serializers.ModelSerializer):
+class FavoriteSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     name = serializers.CharField()
     cooking_time = serializers.IntegerField()
     image = Base64ImageField(max_length=None, use_url=False,)
 
     """Класс - сериализатор для модели Favorite."""
-    class Meta:
-        model = Recipe
-        fields = ('id', 'name', 'cooking_time', 'image')
 
 
-class ListShoppingSerializer(serializers.ModelSerializer):
+class ListShoppingSerializer(serializers.Serializer):
     """Класс - сериализатор для модели ListShopping."""
     id = serializers.IntegerField()
     name = serializers.CharField()
     cooking_time = serializers.IntegerField()
     image = Base64ImageField(max_length=None, use_url=False,)
-
-    class Meta:
-        model = Recipe
-        fields = ('id', 'name', 'cooking_time', 'image')
 
 
 class RecipeInfodSerializer(serializers.ModelSerializer):
