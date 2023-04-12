@@ -78,23 +78,13 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     def get_is_favorited(self, obj):
         request = self.context.get('request')
-        if request.user.is_anonymous:
-            return False
-        if Favorite.objects.filter(user=request.user,
-                                   recipe__id=obj.id).exists():
-            return True
-        else:
-            return False
+        return Favorite.objects.filter(user=request.user,
+                                       recipe__id=obj.id).exists()
 
     def get_is_in_shopping_cart(self, obj):
         request = self.context.get('request')
-        if request.user.is_anonymous:
-            return False
-        if Cart.objects.filter(user=request.user,
-                               recipe__id=obj.id).exists():
-            return True
-        else:
-            return False
+        return Cart.objects.filter(user=request.user,
+                                   recipe__id=obj.id).exists()
 
 
 class IngredienSreateSerializer(serializers.Serializer):
@@ -161,10 +151,6 @@ class FavoriteSerializer(serializers.Serializer):
     cooking_time = serializers.IntegerField()
     image = Base64ImageField(max_length=None, use_url=False,)
 
-    def to_representation(self, instance):
-        context = {'request': self.context.get('request')}
-        return RecipeMinifieldSerializer(instance, context=context).data
-
 
 class CartSerializer(serializers.Serializer):
     id = serializers.IntegerField()
@@ -203,7 +189,8 @@ class SubscriptionSerializer(serializers.ModelSerializer):
                   'last_name', 'is_subscribed', 'recipes', 'recipes_count')
 
     def get_recipes_count(self, obj):
-        return Recipe.objects.filter(author__id=obj.id).count()
+        print(Cart.objects.filter(user__id=obj.id).count())
+        return Cart.objects.filter(user__id=obj.id).count()
 
     def get_recipes(self, obj):
         request = self.context.get('request')

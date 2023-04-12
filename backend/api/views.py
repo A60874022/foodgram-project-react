@@ -18,8 +18,7 @@ from api.filters import RecipeFilters
 
 from .pagination import ProductsPagination
 from .serializers import (CartSerializer, FavoriteSerializer,
-                          IngredientAmountSerializer, IngredientSerializer,
-                          RecipeCreateSerializer, RecipeInfodSerializer,
+                          IngredientSerializer, RecipeCreateSerializer,
                           RecipeSerializer, SubscriptionSerializer,
                           TagSerializer, UserSerializer)
 
