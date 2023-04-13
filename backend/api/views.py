@@ -13,7 +13,7 @@ from reportlab.pdfgen import canvas
 from rest_framework import filters, generics, permissions, viewsets
 from rest_framework.response import Response
 from user.models import User
-
+from django_filters.rest_framework import DjangoFilterBackend
 from api.filters import RecipeFilters
 
 from .pagination import ProductsPagination
@@ -117,7 +117,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend, ]
     filter_class = RecipeFilters
     pagination_class = ProductsPagination
-
     def get_serializer_class(self):
         """Функция выбора класса - сериализатора в зависимости от метода"""
         if self.request.method == "GET":

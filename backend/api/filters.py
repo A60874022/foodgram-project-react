@@ -17,6 +17,7 @@ class RecipeFilters(django_filter.FilterSet):
 
     def get_is_favorited(self, queryset, name, value):
         if value:
+            print(queryset.filter(favorites__user=self.request.user), 123456)
             return queryset.filter(favorites__user=self.request.user)
         return queryset
 
