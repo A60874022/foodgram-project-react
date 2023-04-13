@@ -113,7 +113,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     """Вьюсет для работе с моделью Recipe."""
     queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
-    permission_classes = (permissions.AllowAny,)
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     filter_backends = [DjangoFilterBackend, ]
     filter_class = RecipeFilters
     pagination_class = ProductsPagination
