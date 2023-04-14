@@ -14,7 +14,7 @@ from rest_framework import filters, generics, permissions, viewsets
 from rest_framework.response import Response
 from user.models import User
 
-from api.filters import RecipeFilters
+from api.filters import IngredientSearchFilter, RecipeFilters
 
 from .pagination import ProductsPagination
 from .serializers import (CartSerializer, FavoriteSerializer,
@@ -35,8 +35,9 @@ class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
     """Вьюсет для работе с моделью Ingredient."""
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
-    filter_backends = (filters.SearchFilter,)
-    search_fields = ('name',)
+    filter_backends = (DjangoFilterBackend, IngredientSearchFilter)
+    pagination_class = None
+    search_fields = ['^name', ]
     permission_classes = (permissions.AllowAny,)
 
 
@@ -116,7 +117,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     filter_backends = [DjangoFilterBackend, ]
     filter_class = RecipeFilters
-    pagination_class = ProductsPagination
 
     def get_serializer_class(self):
         """Функция выбора класса - сериализатора в зависимости от метода"""

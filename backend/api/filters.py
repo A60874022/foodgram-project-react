@@ -1,4 +1,5 @@
 from django_filters import rest_framework as django_filter
+from rest_framework import filters
 from recipes.models import Recipe
 from user.models import User
 
@@ -17,11 +18,14 @@ class RecipeFilters(django_filter.FilterSet):
 
     def get_is_favorited(self, queryset, name, value):
         if value:
-            print(queryset.filter(favorites__user=self.request.user), 123456)
             return queryset.filter(favorites__user=self.request.user)
         return queryset
 
     def get_is_in_shopping_cart(self, queryset, name, value):
         if value:
             return queryset.filter(carts__user=self.request.user)
-        return queryset.all()
+
+
+class IngredientSearchFilter(filters.SearchFilter):
+
+    search_param = 'name'

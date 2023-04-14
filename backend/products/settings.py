@@ -27,10 +27,10 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'Optional default value')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-DEBUG = os.getenv('DEBUG', default=False)
+DEBUG =True#os.getenv('DEBUG', default=False)
 
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', default='localhost')
+ALLOWED_HOSTS = ['*']#]os.getenv('ALLOWED_HOSTS', default='localhost')
 
 # Application definition
 
@@ -158,7 +158,8 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-    ]
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'api.pagination.ProductsPagination',
 }
 
 DJOSER = {
