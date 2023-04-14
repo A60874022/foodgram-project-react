@@ -29,4 +29,3 @@ class RecipeFilters(django_filter.FilterSet):
 class IngredientSearchFilter(filters.SearchFilter):
 
     search_param = 'name'
-
