@@ -118,9 +118,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
     filter_backends = (DjangoFilterBackend,)
     filterset_class = RecipeFilters
 
-    def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
-
     def get_serializer_class(self):
         """Функция выбора класса - сериализатора в зависимости от метода"""
         if self.request.method == "GET":
