@@ -10,7 +10,7 @@ from recipes.models import (Cart, Favorite, Ingredient, IngredientAmount,
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas
-from rest_framework import filters, generics, permissions, viewsets
+from rest_framework import generics, permissions, viewsets
 from rest_framework.response import Response
 from user.models import User
 
@@ -115,8 +115,11 @@ class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    filter_backends = [DjangoFilterBackend, ]
-    filter_class = RecipeFilters
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = RecipeFilters
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
 
     def get_serializer_class(self):
         """Функция выбора класса - сериализатора в зависимости от метода"""
